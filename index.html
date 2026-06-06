@@ -2,676 +2,1029 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>BirthdayLove 💕</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&family=Pinyon+Script&display=swap" rel="stylesheet"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Birthday Surprise 🎂</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Nunito:wght@300;400;500;600;700&family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
 <style>
-:root{
-  --rose:#f9d0d8;--rose-mid:#f0a8b8;--rose-deep:#d4627e;
-  --blush:#fce8ee;--cream:#fff8f5;--petal:#fdf0f5;
-  --gold:#f7c66a;--text:#2d1520;--text-soft:#8a5a6a;
-  --shadow:rgba(212,98,126,.18);--shadow-deep:rgba(212,98,126,.28);
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden;min-height:100vh}
-.hearts-bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.heart-float{position:absolute;opacity:0;animation:floatUp linear infinite}
-@keyframes floatUp{0%{transform:translateY(110vh) rotate(0deg);opacity:0}10%{opacity:.4}90%{opacity:.2}100%{transform:translateY(-10vh) rotate(360deg);opacity:0}}
-/* LANDING */
-.landing{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:48px 24px;background:radial-gradient(ellipse 80% 80% at 50% 0%,#fff0f5 0%,var(--cream) 70%);position:relative;z-index:1}
-.landing-pill{display:inline-flex;align-items:center;gap:8px;background:white;border:1px solid var(--rose-mid);border-radius:99px;padding:8px 20px;font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--rose-deep);font-weight:500;margin-bottom:36px}
-.landing-title{font-family:'Cormorant Garamond',serif;font-size:clamp(38px,9vw,68px);line-height:1.1;margin-bottom:20px;font-weight:400}
-.landing-title em{color:var(--rose-deep);font-style:italic}
-.landing-sub{font-size:15px;color:var(--text-soft);line-height:1.85;max-width:380px;margin:0 auto 44px}
-.features-strip{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:40px;max-width:500px}
-.feat-chip{background:white;border:1px solid var(--rose);border-radius:99px;padding:7px 16px;font-size:12px;color:var(--text-soft);display:flex;align-items:center;gap:6px}
-.price-card{margin-top:40px;background:white;border:1.5px solid var(--rose);border-radius:24px;padding:24px 36px;text-align:center}
-.price-big{font-family:'Cormorant Garamond',serif;font-size:48px;color:var(--rose-deep);line-height:1}
-.price-strike{font-size:16px;color:var(--text-soft);text-decoration:line-through;margin-left:8px}
-.price-sub{font-size:12px;color:var(--text-soft);margin-top:6px}
-.price-green{font-size:12px;color:#5aad5a;margin-top:4px}
-/* BUTTONS */
-.btn-primary{background:var(--rose-deep);color:white;border:none;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;padding:16px 44px;cursor:pointer;box-shadow:0 8px 28px var(--shadow);transition:all .25s ease;display:inline-block}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 40px var(--shadow-deep)}
-.btn-secondary{background:white;color:var(--rose-deep);border:1.5px solid var(--rose-mid);border-radius:99px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;padding:13px 32px;cursor:pointer;transition:all .25s ease}
-.btn-secondary:hover{background:var(--blush)}
-.btn-back{background:none;border:1.5px solid var(--rose);border-radius:99px;padding:13px 20px;color:var(--text-soft);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:14px;transition:all .2s}
-.btn-back:hover{background:var(--blush)}
-/* BUILDER */
-.builder-header{background:rgba(255,248,245,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--rose);padding:16px 24px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
-.builder-logo{font-family:'Pinyon Script',cursive;font-size:28px;color:var(--rose-deep);flex:1}
-.step-dots{display:flex;gap:6px}
-.step-dot{width:8px;height:8px;border-radius:99px;background:var(--rose);transition:all .3s}
-.step-dot.active{background:var(--rose-deep);width:24px}
-.builder-body{padding:28px 24px;max-width:520px;margin:0 auto}
-.step-label{font-size:10px;font-weight:500;letter-spacing:2px;color:var(--rose-deep);text-transform:uppercase;margin-bottom:8px}
-.step-heading{font-family:'Cormorant Garamond',serif;font-size:28px;line-height:1.25;margin-bottom:8px}
-.step-sub{font-size:13px;color:var(--text-soft);margin-bottom:28px;line-height:1.7}
-.field{margin-bottom:18px}
-.field label{display:block;font-size:12px;font-weight:500;color:var(--text-soft);margin-bottom:7px;letter-spacing:.3px}
-.field input,.field textarea,.field select{width:100%;border:1.5px solid var(--rose);border-radius:14px;padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:14px;background:white;color:var(--text);transition:border-color .2s;outline:none;resize:none}
-.field input:focus,.field textarea:focus{border-color:var(--rose-deep)}
-.field textarea{height:130px;line-height:1.65}
-.step-nav{display:flex;gap:12px;margin-top:32px;padding-bottom:40px}
-.step-nav .btn-primary{flex:1}
-/* COUPON */
-.coupon-row{display:flex;gap:8px;margin-top:8px}
-.coupon-row input{flex:1}
-.coupon-apply-btn{background:var(--blush);border:1.5px solid var(--rose-mid);border-radius:12px;padding:0 18px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--rose-deep);cursor:pointer;white-space:nowrap;transition:all .2s}
-.coupon-apply-btn:hover{background:var(--rose);color:white}
-.coupon-msg{font-size:12px;margin-top:6px;padding:6px 12px;border-radius:8px}
-.coupon-ok{background:#edfaed;color:#2e7d32}
-.coupon-err{background:#fdecea;color:#c62828}
-/* THEME / MUSIC */
-.theme-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:24px}
-.theme-card{border:2px solid var(--rose);border-radius:16px;padding:14px;cursor:pointer;transition:all .2s;background:white;text-align:center}
-.theme-card.selected{border-color:var(--rose-deep);background:var(--blush)}
-.theme-icon{font-size:26px;margin-bottom:5px}
-.theme-name{font-size:13px;font-weight:500}
-.theme-desc{font-size:11px;color:var(--text-soft);margin-top:2px}
-.music-list{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
-.music-item{display:flex;align-items:center;gap:12px;background:white;border:1.5px solid var(--rose);border-radius:14px;padding:12px 16px;cursor:pointer;transition:all .2s}
-.music-item.selected{border-color:var(--rose-deep);background:var(--blush)}
-.music-check{font-size:16px;opacity:0;transition:opacity .2s;color:var(--rose-deep)}
-.music-item.selected .music-check{opacity:1}
-.balloon-msg-group{background:var(--petal);border:1px solid var(--rose);border-radius:16px;padding:18px;margin-bottom:16px}
-.balloon-msg-group h4{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--rose-deep);margin-bottom:12px}
-/* PREVIEW */
-.preview-toolbar{background:rgba(255,248,245,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--rose);padding:14px 24px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
-.preview-label{flex:1;font-size:13px;color:var(--text-soft);display:flex;align-items:center;gap:8px}
-.preview-badge{background:var(--blush);color:var(--rose-deep);font-size:10px;font-weight:600;padding:4px 10px;border-radius:99px;letter-spacing:.5px}
-.preview-phone{max-width:420px;margin:20px auto 0;background:white;border-radius:28px;box-shadow:0 24px 64px var(--shadow);overflow:hidden;border:1px solid var(--rose)}
-.preview-actions{padding:24px;max-width:480px;margin:0 auto}
-.preview-note{background:white;border:1px solid var(--rose);border-radius:16px;padding:16px 18px;font-size:13px;color:var(--text-soft);line-height:1.7;margin-bottom:18px}
-.price-badge{text-align:center;margin-bottom:18px}
-.price-amount{font-family:'Cormorant Garamond',serif;font-size:44px;color:var(--rose-deep)}
-.price-inc{font-size:12px;color:#5aad5a;margin-top:4px}
-/* BIRTHDAY SITE */
-.bday-hero{padding:52px 28px 40px;text-align:center;position:relative;overflow:hidden;background:linear-gradient(165deg,#fff0f5 0%,#fce8ee 55%,#f8e8f8 100%)}
-.bday-to-label{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--text-soft);margin-bottom:12px}
-.bday-name{font-family:'Pinyon Script',cursive;font-size:52px;color:var(--rose-deep);line-height:1.15;margin-bottom:8px}
-.bday-subtitle{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:var(--text-soft)}
-.sparkle-row{display:flex;justify-content:center;gap:8px;margin-top:14px;font-size:18px}
-.spark{display:inline-block;animation:sparkPulse 1.5s ease-in-out infinite}
-.spark:nth-child(2){animation-delay:.3s}.spark:nth-child(3){animation-delay:.6s}
-@keyframes sparkPulse{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.3);opacity:1}}
-/* CAKE */
-.cake-section{padding:28px 24px;text-align:center}
-.cake-wrap{display:flex;justify-content:center;margin-bottom:16px}
-.cake-svg{width:130px;height:130px;cursor:pointer;transition:transform .2s;filter:drop-shadow(0 8px 16px rgba(212,98,126,.2))}
-.cake-svg:hover{transform:scale(1.05)}
-.candle-flame{transform-origin:60px 34px;animation:flicker .8s ease-in-out infinite alternate}
-@keyframes flicker{0%{transform:scaleX(1) scaleY(1) rotate(-2deg);opacity:1}50%{transform:scaleX(.8) scaleY(1.15) rotate(2deg);opacity:.9}100%{transform:scaleX(1.1) scaleY(.9) rotate(-1deg);opacity:1}}
-.cake-hint{font-size:13px;color:var(--text-soft);animation:pulseBorder 2s ease-in-out infinite;background:none;border:1.5px solid var(--rose-mid);border-radius:99px;padding:10px 24px;cursor:pointer;font-family:'DM Sans',sans-serif}
-@keyframes pulseBorder{0%,100%{box-shadow:0 0 0 0 rgba(212,98,126,0)}50%{box-shadow:0 0 0 6px rgba(212,98,126,.15)}}
-.blownout-msg{font-family:'Pinyon Script',cursive;font-size:26px;color:var(--rose-deep);margin-top:12px;animation:fadeSlide .6s ease}
-@keyframes fadeSlide{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-/* LETTER */
-.bday-letter{padding:32px 28px;background:white;border-top:1px solid var(--rose)}
-.letter-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--rose-deep);margin-bottom:14px;text-align:center}
-.letter-text{font-family:'Cormorant Garamond',serif;font-size:16px;line-height:2;color:var(--text);white-space:pre-wrap}
-.letter-sign{font-family:'Pinyon Script',cursive;font-size:30px;color:var(--rose-deep);margin-top:20px;text-align:right}
-/* BALLOONS */
-.balloon-section{padding:36px 24px;background:#fff8fc;border-top:1px solid var(--rose)}
-.balloon-section-title{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--rose-deep);text-align:center;margin-bottom:6px}
-.balloon-section-sub{font-size:13px;color:var(--text-soft);text-align:center;margin-bottom:32px}
-.balloon-arena{display:flex;flex-wrap:wrap;justify-content:center;gap:24px;min-height:200px}
-.balloon-wrap{display:flex;flex-direction:column;align-items:center;cursor:pointer;position:relative;transition:transform .15s;user-select:none;width:86px}
-.balloon-wrap:hover:not(.popped){transform:scale(1.1) translateY(-6px)}
-.balloon-string-emoji{font-size:15px;margin-bottom:2px;opacity:.7}
-/* POLAROID CARD */
-.balloon-card-wrap{width:210px;background:white;border-radius:18px;border:1.5px solid var(--rose);overflow:hidden;box-shadow:0 16px 48px var(--shadow);animation:popCardIn .5s cubic-bezier(.34,1.56,.64,1);margin:0 auto}
-@keyframes popCardIn{from{opacity:0;transform:scale(.65) translateY(24px)}to{opacity:1;transform:scale(1) translateY(0)}}
-.balloon-card-media{width:100%;aspect-ratio:1;background:linear-gradient(135deg,#fce8ee,#f8e8f8);display:flex;align-items:center;justify-content:center;font-size:60px;overflow:hidden;position:relative}
-.balloon-card-media img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
-.balloon-card-frame{padding:14px 16px 8px;background:white}
-.balloon-card-msg{font-family:'Cormorant Garamond',serif;font-size:14px;line-height:1.65;color:var(--text);text-align:center;font-style:italic;margin-bottom:6px}
-.balloon-card-from{font-size:11px;color:var(--text-soft);text-align:right;padding-bottom:6px;font-family:'Pinyon Script',cursive;font-size:18px;color:var(--rose-deep)}
-.pop-burst{position:absolute;top:8px;left:50%;transform:translateX(-50%);font-size:38px;animation:popBurst .55s ease forwards;pointer-events:none;z-index:10}
-@keyframes popBurst{0%{opacity:1;transform:translateX(-50%) scale(.3)}40%{opacity:1;transform:translateX(-50%) scale(2)}100%{opacity:0;transform:translateX(-50%) scale(2.6)}}
-.all-popped{width:100%;text-align:center;padding:24px;font-family:'Pinyon Script',cursive;font-size:28px;color:var(--rose-deep);animation:fadeSlide .6s ease}
-/* CONFETTI particles inside balloon arena */
-.balloon-confetti{position:absolute;pointer-events:none;font-size:16px;animation:balloonConfetti 1s ease forwards}
-@keyframes balloonConfetti{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0)}}
-/* WISHES */
-.wishes-section{padding:32px 24px;background:var(--petal);border-top:1px solid var(--rose)}
-.wishes-title{font-family:'Cormorant Garamond',serif;font-size:22px;text-align:center;margin-bottom:20px}
-.wish-card{background:white;border:1px solid var(--rose);border-radius:16px;padding:18px 20px;display:flex;align-items:flex-start;gap:14px;margin-bottom:12px;opacity:0;transform:translateY(10px);transition:all .5s ease}
-.wish-card.revealed{opacity:1;transform:translateY(0)}
-.wish-card:nth-child(2){transition-delay:.15s}.wish-card:nth-child(3){transition-delay:.3s}
-.wish-icon{font-size:22px;flex-shrink:0;margin-top:2px}
-.wish-text{font-size:14px;line-height:1.7;color:var(--text)}
-/* FOOTER */
-.bday-footer{padding:40px 28px;text-align:center;background:white;border-top:1px solid var(--rose)}
-.footer-heart{font-size:38px;margin-bottom:14px;display:block;animation:heartbeat 1.5s ease-in-out infinite}
-@keyframes heartbeat{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
-.footer-text{font-family:'Pinyon Script',cursive;font-size:26px;color:var(--rose-deep);line-height:1.7}
-/* MUSIC FAB */
-.music-fab{position:fixed;bottom:24px;right:24px;z-index:999;background:var(--rose-deep);color:white;border:none;border-radius:99px;width:48px;height:48px;font-size:18px;cursor:pointer;box-shadow:0 6px 20px var(--shadow);transition:all .2s;display:flex;align-items:center;justify-content:center}
-.music-fab:hover{transform:scale(1.08)}
-/* PAYMENT */
-.payment-wrap{min-height:100vh;background:var(--petal);padding:32px 24px;position:relative;z-index:1}
-.payment-body{max-width:480px;margin:0 auto}
-.payment-header{text-align:center;margin-bottom:28px}
-.payment-header h2{font-family:'Cormorant Garamond',serif;font-size:30px;margin-bottom:8px}
-.payment-header p{font-size:13px;color:var(--text-soft)}
-.order-summary{background:white;border-radius:20px;padding:20px;border:1px solid var(--rose);margin-bottom:20px}
-.order-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--rose);font-size:13px}
-.order-row:last-child{border-bottom:none}
-.order-row.total{font-weight:600;font-size:15px;color:var(--rose-deep)}
-.order-label{color:var(--text-soft)}
-.order-discount{color:#2e7d32;font-size:12px}
-.pay-btn{width:100%;background:var(--rose-deep);color:white;border:none;border-radius:16px;padding:18px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;box-shadow:0 8px 24px var(--shadow);transition:all .25s;display:flex;align-items:center;justify-content:center;gap:10px}
-.pay-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 14px 36px var(--shadow-deep)}
-.pay-btn:disabled{opacity:.65;cursor:not-allowed}
-.pay-secure{text-align:center;font-size:11px;color:var(--text-soft);margin-top:10px}
-/* SUCCESS */
-.success-wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 24px;text-align:center;background:var(--petal);position:relative;z-index:1}
-.success-icon{font-size:72px;margin-bottom:24px;animation:popIn .6s cubic-bezier(.34,1.56,.64,1)}
-@keyframes popIn{0%{transform:scale(0)}100%{transform:scale(1)}}
-.success-title{font-family:'Cormorant Garamond',serif;font-size:36px;margin-bottom:12px}
-.success-sub{font-size:14px;color:var(--text-soft);max-width:320px;margin:0 auto 28px;line-height:1.8}
-.link-box{background:white;border:2px solid var(--rose);border-radius:16px;padding:16px 20px;font-size:12px;word-break:break-all;color:var(--rose-deep);margin-bottom:14px;width:100%;max-width:380px;cursor:pointer;transition:all .2s;text-align:left}
-.link-box:hover{border-color:var(--rose-deep);background:var(--blush)}
-.share-row{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;justify-content:center}
-.share-btn{background:white;border:1.5px solid var(--rose);border-radius:99px;padding:10px 20px;font-size:12px;color:var(--text-soft);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px}
-.share-btn:hover{background:var(--blush)}
-/* CONFETTI */
-.confetti-piece{position:fixed;top:-10px;z-index:9999;pointer-events:none;animation:confettiDrop linear forwards}
-@keyframes confettiDrop{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
-@media(max-width:480px){.preview-phone{border-radius:0;margin:0}.bday-name{font-size:40px}.landing-title{font-size:36px}.balloon-card-wrap{width:185px}}
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--rose);border-radius:99px}
+  :root {
+    --pink-soft: #FFE4EF;
+    --pink-mid: #FFB6D3;
+    --pink-deep: #FF7BAC;
+    --pink-accent: #E8477A;
+    --cream: #FFF8F3;
+    --blush: #FDEEF5;
+    --lavender: #F0E6FF;
+    --gold: #FFD700;
+    --text-dark: #3D1A24;
+    --text-mid: #7A3B55;
+    --text-light: #C06090;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Nunito', sans-serif; background: var(--blush); color: var(--text-dark); overflow-x: hidden; min-height: 100vh; }
+  .font-playfair { font-family: 'Playfair Display', serif; }
+  .font-dancing { font-family: 'Dancing Script', cursive; }
+  .page { display: none; min-height: 100vh; animation: fadeInPage 0.6s ease; }
+  .page.active { display: block; }
+  @keyframes fadeInPage { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .confetti-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; overflow: hidden; }
+  .confetti-piece { position: absolute; top: -20px; width: 10px; height: 10px; border-radius: 50%; animation: confettiFall linear infinite; }
+  @keyframes confettiFall { 0% { transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
+  .bg-dots { background-image: radial-gradient(circle, var(--pink-mid) 1px, transparent 1px); background-size: 24px 24px; background-color: var(--blush); }
+  .card-cute { background: white; border-radius: 24px; box-shadow: 0 8px 32px rgba(232,71,122,0.12), 0 2px 8px rgba(232,71,122,0.08); border: 1.5px solid rgba(255,182,211,0.4); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+  .card-cute:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(232,71,122,0.18); }
+  .btn-pink { background: linear-gradient(135deg, var(--pink-deep), var(--pink-accent)); color: white; font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 1.1rem; padding: 16px 40px; border-radius: 50px; border: none; cursor: pointer; box-shadow: 0 8px 24px rgba(232,71,122,0.35); transition: all 0.3s ease; letter-spacing: 0.5px; }
+  .btn-pink:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(232,71,122,0.45); }
+  .btn-pink:active { transform: translateY(0); }
+  .btn-outline { background: transparent; color: var(--pink-accent); font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 1rem; padding: 14px 36px; border-radius: 50px; border: 2px solid var(--pink-deep); cursor: pointer; transition: all 0.3s ease; }
+  .btn-outline:hover { background: var(--pink-soft); transform: translateY(-2px); }
+  .input-cute { width: 100%; padding: 14px 20px; border-radius: 16px; border: 2px solid var(--pink-mid); background: white; font-family: 'Nunito', sans-serif; font-size: 1rem; color: var(--text-dark); outline: none; transition: border-color 0.3s ease, box-shadow 0.3s ease; }
+  .input-cute:focus { border-color: var(--pink-deep); box-shadow: 0 0 0 4px rgba(255,123,172,0.15); }
+  .input-cute::placeholder { color: var(--text-light); }
+  .progress-bar { width: 100%; height: 6px; background: var(--pink-soft); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--pink-mid), var(--pink-accent)); border-radius: 3px; transition: width 0.5s ease; }
+  .float-anim { animation: floatUpDown 3s ease-in-out infinite; }
+  .float-anim-delay { animation: floatUpDown 3s ease-in-out infinite 1.5s; }
+  @keyframes floatUpDown { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+  .heart-pulse { animation: heartBeat 1.5s ease-in-out infinite; }
+  @keyframes heartBeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+  .flip-card { perspective: 1000px; cursor: pointer; }
+  .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.7s cubic-bezier(0.4,0,0.2,1); transform-style: preserve-3d; }
+  .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+  .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; }
+  .flip-card-back { transform: rotateY(180deg); }
+  .flower-btn { cursor: pointer; transition: transform 0.3s ease; animation: floatUpDown 2.5s ease-in-out infinite; }
+  .flower-btn:nth-child(2) { animation-delay: 0.8s; }
+  .flower-btn:nth-child(3) { animation-delay: 1.6s; }
+  .flower-btn:hover { transform: scale(1.15) rotate(5deg); }
+  #musicBtn { position: fixed; top: 16px; right: 16px; z-index: 1000; width: 44px; height: 44px; background: white; border-radius: 50%; border: 2px solid var(--pink-mid); box-shadow: 0 4px 12px rgba(232,71,122,0.2); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: all 0.3s ease; }
+  #musicBtn:hover { transform: scale(1.1); }
+  .divider-hearts { text-align: center; font-size: 1.2rem; letter-spacing: 8px; color: var(--pink-mid); margin: 20px 0; }
+  .reason-card { background: white; border-radius: 20px; padding: 24px; border-left: 4px solid var(--pink-deep); box-shadow: 0 4px 16px rgba(232,71,122,0.1); transition: transform 0.3s ease; animation: slideInCard 0.5s ease forwards; opacity: 0; }
+  @keyframes slideInCard { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .sticker { display: inline-block; animation: wiggle 3s ease-in-out infinite; }
+  @keyframes wiggle { 0%, 90%, 100% { transform: rotate(0deg); } 92% { transform: rotate(-5deg); } 96% { transform: rotate(5deg); } }
+  .tape { display: inline-block; background: rgba(255,182,211,0.5); padding: 3px 24px; transform: rotate(-2deg); font-size: 0.7rem; color: var(--text-mid); letter-spacing: 2px; text-transform: uppercase; }
+  .preview-banner { background: linear-gradient(135deg, #FF7BAC, #E8477A); color: white; text-align: center; padding: 10px; font-weight: 700; font-size: 0.9rem; letter-spacing: 1px; position: sticky; top: 0; z-index: 100; }
+  .link-box { background: var(--pink-soft); border: 2px dashed var(--pink-mid); border-radius: 16px; padding: 16px 20px; font-family: 'Courier New', monospace; font-size: 0.75rem; color: var(--text-mid); word-break: break-all; text-align: center; }
+  .shine-effect { position: relative; overflow: hidden; }
+  .shine-effect::after { content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); animation: shine 3s infinite; }
+  @keyframes shine { 0% { left: -100%; } 100% { left: 200%; } }
+  .coupon-input { background: var(--pink-soft); border: 2px dashed var(--pink-mid); padding: 10px 16px; border-radius: 12px; font-family: 'Nunito', sans-serif; font-size: 1rem; outline: none; width: 100%; color: var(--text-dark); transition: border-color 0.3s; }
+  .coupon-input:focus { border-color: var(--pink-deep); }
+  .ribbon { position: absolute; top: -10px; right: 20px; background: linear-gradient(135deg, var(--pink-deep), var(--pink-accent)); color: white; font-size: 0.75rem; font-weight: 700; padding: 6px 14px; border-radius: 4px; }
+  .ribbon::after { content: ''; position: absolute; bottom: -8px; right: 0; width: 0; height: 0; border-left: 8px solid transparent; border-top: 8px solid var(--pink-accent); }
+  .illustration { filter: drop-shadow(0 8px 16px rgba(232,71,122,0.2)); }
+  .emoji-bounce { animation: emojiBounce 2s ease-in-out infinite; }
+  @keyframes emojiBounce { 0%, 100% { transform: translateY(0) rotate(0); } 25% { transform: translateY(-8px) rotate(-5deg); } 75% { transform: translateY(-4px) rotate(5deg); } }
+
+  /* ===== RECIPIENT JOURNEY NAV ===== */
+  .rjp-step { display: none; }
+  .rjp-step.active { display: block; animation: fadeInPage 0.6s ease; }
+  .step-indicator { display: flex; gap: 6px; justify-content: center; margin-bottom: 20px; }
+  .step-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--pink-mid); transition: all 0.3s; }
+  .step-dot.done { background: var(--pink-accent); }
+  .step-dot.current { width: 20px; border-radius: 4px; background: var(--pink-accent); }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--pink-soft); }
+  ::-webkit-scrollbar-thumb { background: var(--pink-mid); border-radius: 3px; }
 </style>
 </head>
 <body>
-<div id="root"></div>
+
+<button id="musicBtn" onclick="toggleMusic()" title="Toggle Music">🎵</button>
+<div class="confetti-container" id="confettiContainer"></div>
+<audio id="bgMusic" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg"/>
+</audio>
+
+<!-- ======================================== -->
+<!-- PAGE 1: WELCOME / SETUP                  -->
+<!-- ======================================== -->
+<div id="page-welcome" class="page active">
+  <div class="bg-dots min-h-screen flex flex-col">
+    <div style="background: linear-gradient(180deg, var(--pink-soft) 0%, transparent 100%); padding: 20px; text-align: center;">
+      <div class="flex justify-center gap-4 text-2xl">
+        <span class="sticker">🎀</span><span class="float-anim">🌸</span><span class="sticker">🎀</span>
+      </div>
+    </div>
+    <div class="flex-1 flex items-center justify-center px-4 py-8">
+      <div class="w-full max-w-md">
+        <div class="text-center mb-6 float-anim">
+          <svg width="120" height="120" viewBox="0 0 120 120" class="illustration mx-auto">
+            <ellipse cx="60" cy="85" rx="30" ry="25" fill="#FFD4A8"/>
+            <circle cx="60" cy="55" r="28" fill="#FFD4A8"/>
+            <polygon points="36,34 28,14 48,30" fill="#FFD4A8"/>
+            <polygon points="38,32 32,18 46,30" fill="#FFB6D3"/>
+            <polygon points="84,34 92,14 72,30" fill="#FFD4A8"/>
+            <polygon points="82,32 88,18 74,30" fill="#FFB6D3"/>
+            <polygon points="60,20 45,45 75,45" fill="#FF7BAC"/>
+            <line x1="45" y1="45" x2="75" y2="45" stroke="#FFB6D3" stroke-width="3"/>
+            <circle cx="60" cy="20" r="3" fill="#FFD700"/>
+            <line x1="52" y1="28" x2="68" y2="28" stroke="white" stroke-width="1.5" opacity="0.6"/>
+            <line x1="49" y1="35" x2="71" y2="35" stroke="white" stroke-width="1.5" opacity="0.6"/>
+            <ellipse cx="50" cy="55" rx="6" ry="7" fill="white"/>
+            <ellipse cx="70" cy="55" rx="6" ry="7" fill="white"/>
+            <ellipse cx="51" cy="56" rx="4" ry="5" fill="#5C3A1E"/>
+            <ellipse cx="71" cy="56" rx="4" ry="5" fill="#5C3A1E"/>
+            <circle cx="52.5" cy="54.5" r="1.5" fill="white"/>
+            <circle cx="72.5" cy="54.5" r="1.5" fill="white"/>
+            <ellipse cx="43" cy="63" rx="6" ry="4" fill="#FFB6D3" opacity="0.6"/>
+            <ellipse cx="77" cy="63" rx="6" ry="4" fill="#FFB6D3" opacity="0.6"/>
+            <ellipse cx="60" cy="65" rx="3" ry="2" fill="#FF7BAC"/>
+            <path d="M55 68 Q60 73 65 68" stroke="#FF7BAC" stroke-width="1.5" fill="none"/>
+            <line x1="32" y1="63" x2="52" y2="65" stroke="#C06090" stroke-width="1" opacity="0.6"/>
+            <line x1="32" y1="67" x2="52" y2="67" stroke="#C06090" stroke-width="1" opacity="0.6"/>
+            <line x1="68" y1="65" x2="88" y2="63" stroke="#C06090" stroke-width="1" opacity="0.6"/>
+            <line x1="68" y1="67" x2="88" y2="67" stroke="#C06090" stroke-width="1" opacity="0.6"/>
+            <path d="M46 78 Q60 85 74 78" stroke="#FF7BAC" stroke-width="2" fill="none"/>
+            <ellipse cx="46" cy="78" rx="7" ry="4" fill="#FF7BAC" opacity="0.7"/>
+            <ellipse cx="74" cy="78" rx="7" ry="4" fill="#FF7BAC" opacity="0.7"/>
+            <circle cx="60" cy="81" r="3" fill="#E8477A"/>
+          </svg>
+        </div>
+        <div class="card-cute p-8 relative">
+          <div class="tape absolute -top-3 left-1/2 -translate-x-1/2">✨ Birthday Magic ✨</div>
+          <div class="text-center mb-6">
+            <h1 class="font-playfair text-3xl font-bold" style="color: var(--text-dark);">Create a Birthday<br/><span class="font-dancing text-4xl" style="color: var(--pink-accent);">Surprise 💕</span></h1>
+            <p class="mt-2 text-sm" style="color: var(--text-light);">Make someone feel extra special today ✨</p>
+          </div>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-semibold mb-2" style="color: var(--text-mid);">👤 Your Name</label>
+              <input type="text" id="senderName" class="input-cute" placeholder="e.g. Priya"/>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-2" style="color: var(--text-mid);">🎂 Birthday Person's Name</label>
+              <input type="text" id="recipientName" class="input-cute" placeholder="e.g. Mahii"/>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-2" style="color: var(--text-mid);">💌 Your Birthday Message</label>
+              <textarea id="customMessage" class="input-cute resize-none" rows="4" placeholder="Write something heartfelt... You mean the world to me! 💕"></textarea>
+            </div>
+          </div>
+          <div class="text-center mt-6">
+            <button class="btn-pink shine-effect w-full" onclick="startJourney()">✨ Create Birthday Magic ✨</button>
+          </div>
+        </div>
+        <div class="flex justify-center gap-6 mt-6 text-2xl">
+          <span class="float-anim-delay">🌸</span><span class="heart-pulse">💖</span><span class="float-anim">🌸</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================== -->
+<!-- PAGE 2: STORYBOOK / MEMORY CARDS         -->
+<!-- ======================================== -->
+<div id="page-storybook" class="page">
+  <div class="min-h-screen" style="background: linear-gradient(135deg, var(--blush) 0%, var(--lavender) 50%, var(--pink-soft) 100%);">
+    <div class="max-w-lg mx-auto px-4 py-8">
+      <div class="text-center mb-8">
+        <div class="sticker text-4xl mb-2">🧸</div>
+        <h2 class="font-playfair text-3xl font-bold" style="color: var(--text-dark);">Our Little Story</h2>
+        <p class="font-dancing text-xl mt-1" style="color: var(--pink-accent);">Flip the cards to reveal ✨</p>
+        <div class="divider-hearts mt-3">♥ ♥ ♥</div>
+      </div>
+      <div class="flex items-center gap-3 mb-8">
+        <span class="text-xs font-semibold" style="color: var(--text-light);">Page 1 of 5</span>
+        <div class="progress-bar flex-1"><div class="progress-fill" style="width: 20%"></div></div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mb-8">
+        <div class="flip-card" style="height: 180px;" onclick="flipCard(this)">
+          <div class="flip-card-inner">
+            <div class="flip-card-front card-cute flex flex-col items-center justify-center p-4" style="background: linear-gradient(135deg, #FFE4EF, #FFF0F7);">
+              <div class="text-5xl float-anim">🎂</div>
+              <p class="text-xs font-semibold mt-2 text-center" style="color: var(--text-light);">Tap to reveal ✨</p>
+            </div>
+            <div class="flip-card-back flex flex-col items-center justify-center p-4" style="background: linear-gradient(135deg, #FFB6D3, #FF7BAC); border-radius: 20px;">
+              <div class="text-3xl">🎂</div>
+              <p class="font-dancing text-xl text-white font-bold mt-1 text-center">The day you were born, the world got brighter 🌟</p>
+            </div>
+          </div>
+        </div>
+        <div class="flip-card" style="height: 180px;" onclick="flipCard(this)">
+          <div class="flip-card-inner">
+            <div class="flip-card-front card-cute flex flex-col items-center justify-center p-4" style="background: linear-gradient(135deg, #F0E6FF, #EDF0FF);">
+              <div class="text-5xl float-anim-delay">🌸</div>
+              <p class="text-xs font-semibold mt-2 text-center" style="color: var(--text-light);">Tap to reveal ✨</p>
+            </div>
+            <div class="flip-card-back flex flex-col items-center justify-center p-4" style="background: linear-gradient(135deg, #B39DDB, #9C64C8); border-radius: 20px;">
+              <div class="text-3xl">🌸</div>
+              <p class="font-dancing text-xl text-white font-bold mt-1 text-center">Your smile is my favourite thing 🌺</p>
+            </div>
+          </div>
+        </div>
+        <div class="flip-card" style="height: 180px;" onclick="flipCard(this)">
+          <div class="flip-card-inner">
+            <div class="flip-card-front card-cute flex flex-col items-center justify-center p-4" style="background: linear-gradient(135deg, #FFF8E1, #FFF3E0);">
+              <div class="text-5xl float-anim">🌟</div>
+              <p class="text-xs font-semibold mt-2 text-center" style="color: var(--text-light);">Tap to reveal ✨</p>
+            </div>
+            <div class="flip-card-back flex flex-col items-center justify-center p-4" style="background: linear-gradient(135deg, #FFD54F, #FFA726); border-radius: 20px;">
+              <div class="text-3xl">🌟</div>
+              <p class="font-dancing text-xl text-white font-bold mt-1 text-center">Every day with you is golden ✨</p>
+            </div>
+          </div>
+        </div>
+        <div class="flip-card" style="height: 180px;" onclick="flipCard(this)">
+          <div class="flip-card-inner">
+            <div class="flip-card-front card-cute flex flex-col items-center justify-center p-4" style="background: linear-gradient(135deg, #E8F5E9, #F1F8E9);">
+              <div class="text-5xl float-anim-delay">🧸</div>
+              <p class="text-xs font-semibold mt-2 text-center" style="color: var(--text-light);">Tap to reveal ✨</p>
+            </div>
+            <div class="flip-card-back flex flex-col items-center justify-center p-4" style="background: linear-gradient(135deg, #A5D6A7, #66BB6A); border-radius: 20px;">
+              <div class="text-3xl">🧸</div>
+              <p class="font-dancing text-xl text-white font-bold mt-1 text-center">You're the warmest hug in human form 🤗</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mb-6">
+        <svg width="100" height="110" viewBox="0 0 100 110" class="illustration mx-auto float-anim-delay">
+          <ellipse cx="50" cy="80" rx="26" ry="24" fill="#C8956C"/>
+          <ellipse cx="22" cy="78" rx="10" ry="8" fill="#C8956C" transform="rotate(-20 22 78)"/>
+          <ellipse cx="78" cy="78" rx="10" ry="8" fill="#C8956C" transform="rotate(20 78 78)"/>
+          <rect x="72" y="86" width="18" height="16" rx="3" fill="#FF7BAC"/>
+          <rect x="72" y="91" width="18" height="3" fill="white" opacity="0.5"/>
+          <rect x="80" y="86" width="3" height="16" fill="white" opacity="0.5"/>
+          <ellipse cx="81" cy="86" rx="5" ry="3" fill="#E8477A"/>
+          <circle cx="50" cy="47" r="26" fill="#C8956C"/>
+          <circle cx="28" cy="27" r="11" fill="#C8956C"/>
+          <circle cx="28" cy="27" r="7" fill="#E8A87C"/>
+          <circle cx="72" cy="27" r="11" fill="#C8956C"/>
+          <circle cx="72" cy="27" r="7" fill="#E8A87C"/>
+          <ellipse cx="50" cy="53" rx="14" ry="10" fill="#E8A87C"/>
+          <circle cx="41" cy="43" r="5" fill="white"/>
+          <circle cx="59" cy="43" r="5" fill="white"/>
+          <circle cx="42" cy="43" r="3" fill="#3D1A24"/>
+          <circle cx="60" cy="43" r="3" fill="#3D1A24"/>
+          <circle cx="43" cy="42" r="1" fill="white"/>
+          <circle cx="61" cy="42" r="1" fill="white"/>
+          <ellipse cx="35" cy="52" rx="6" ry="4" fill="#FFB6D3" opacity="0.7"/>
+          <ellipse cx="65" cy="52" rx="6" ry="4" fill="#FFB6D3" opacity="0.7"/>
+          <ellipse cx="50" cy="54" rx="3.5" ry="2.5" fill="#8B5E3C"/>
+          <path d="M44 58 Q50 64 56 58" stroke="#8B5E3C" stroke-width="2" fill="none"/>
+          <ellipse cx="43" cy="69" rx="6" ry="4" fill="#FF7BAC"/>
+          <ellipse cx="57" cy="69" rx="6" ry="4" fill="#FF7BAC"/>
+          <circle cx="50" cy="69" r="3" fill="#E8477A"/>
+        </svg>
+      </div>
+      <div class="text-center">
+        <p class="font-dancing text-xl mb-4" style="color: var(--text-mid);">Ready to continue the magic? 🌟</p>
+        <button class="btn-pink" onclick="goToPage('page-letter')">Read Birthday Letter 💌</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================== -->
+<!-- PAGE 3: BIRTHDAY LETTER                  -->
+<!-- ======================================== -->
+<div id="page-letter" class="page">
+  <div class="min-h-screen" style="background: linear-gradient(160deg, #FFF8F3 0%, #FDEEF5 100%);">
+    <div class="max-w-lg mx-auto px-4 py-8">
+      <div class="text-center mb-6">
+        <div class="text-4xl heart-pulse mb-2">💌</div>
+        <div class="tape">A Birthday Love Letter</div>
+        <p class="mt-3 text-sm" style="color: var(--text-light);">From my heart to the birthday queen</p>
+      </div>
+      <div class="card-cute p-0 overflow-hidden relative mb-6">
+        <div style="background: linear-gradient(135deg, var(--pink-soft), var(--lavender)); padding: 20px 24px;">
+          <div class="flex items-center gap-3">
+            <svg width="52" height="52" viewBox="0 0 52 52" class="illustration">
+              <circle cx="26" cy="30" r="16" fill="#FFD4A8"/>
+              <polygon points="26,10 16,24 36,24" fill="#FF7BAC"/>
+              <circle cx="26" cy="10" r="2" fill="#FFD700"/>
+              <polygon points="13,18 8,6 20,16" fill="#FFD4A8"/>
+              <polygon points="39,18 44,6 32,16" fill="#FFD4A8"/>
+              <ellipse cx="20" cy="30" rx="4" ry="5" fill="white"/>
+              <ellipse cx="32" cy="30" rx="4" ry="5" fill="white"/>
+              <ellipse cx="21" cy="31" rx="2.5" ry="3" fill="#3D1A24"/>
+              <ellipse cx="33" cy="31" rx="2.5" ry="3" fill="#3D1A24"/>
+              <ellipse cx="26" cy="37" rx="3" ry="2" fill="#FFD4A8"/>
+              <ellipse cx="22" cy="35" rx="3" ry="2" fill="#FFB6D3" opacity="0.6"/>
+              <ellipse cx="30" cy="35" rx="3" ry="2" fill="#FFB6D3" opacity="0.6"/>
+              <ellipse cx="26" cy="36" rx="2" ry="1.5" fill="#FF7BAC"/>
+            </svg>
+            <div>
+              <p class="font-semibold text-sm" style="color: var(--text-mid);">To My Birthday Princess 👸</p>
+              <p class="text-xs" style="color: var(--text-light);" id="letterSubtitle">With all my love ❤️</p>
+            </div>
+          </div>
+        </div>
+        <div class="p-6 space-y-4" style="background: repeating-linear-gradient(transparent, transparent 27px, #FFE4EF 28px); line-height: 28px;">
+          <p class="font-playfair italic text-base" style="color: var(--text-dark);">My dearest birthday girl,</p>
+          <p class="text-sm leading-relaxed" style="color: var(--text-mid);">Today marks another year of your incredible existence, and I couldn't be more grateful to celebrate it with you. 🌸</p>
+          <p class="text-sm leading-relaxed" style="color: var(--text-mid);" id="customMsgDisplay">You bring so much joy, laughter, and love into this world — and into my life. You deserve all the magic, all the dreams, and all the love this world has to offer. 💕</p>
+          <p class="text-sm leading-relaxed" style="color: var(--text-mid);">On this special day, I want you to know that every moment spent with you is a treasure. You are my sunshine, my happy place, my favourite person. 🌟</p>
+          <div class="pt-4 text-right">
+            <p class="font-dancing text-2xl" style="color: var(--pink-accent);">Forever yours 💕</p>
+            <p class="font-dancing text-xl mt-1" style="color: var(--text-mid);" id="senderNameDisplay">Your person ❤️</p>
+          </div>
+        </div>
+        <div style="background: linear-gradient(135deg, var(--pink-mid), var(--pink-deep)); height: 4px;"></div>
+      </div>
+      <div class="divider-hearts">♥ ♥ ♥</div>
+      <div class="text-center my-4">
+        <div class="flex justify-center gap-4 text-3xl">
+          <span class="float-anim">🌸</span><span class="heart-pulse">💖</span><span class="float-anim-delay">🌸</span>
+        </div>
+      </div>
+      <div class="text-center">
+        <button class="btn-pink" onclick="goToPage('page-reasons')">See Why I Love You 💝</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================== -->
+<!-- PAGE 4: REASONS I APPRECIATE YOU         -->
+<!-- ======================================== -->
+<div id="page-reasons" class="page">
+  <div class="min-h-screen" style="background: linear-gradient(135deg, var(--lavender) 0%, var(--pink-soft) 100%);">
+    <div class="max-w-lg mx-auto px-4 py-8">
+      <div class="text-center mb-8">
+        <div class="text-4xl mb-2 float-anim">💝</div>
+        <h2 class="font-playfair text-3xl font-bold" style="color: var(--text-dark);">Reasons I Love You</h2>
+        <p class="font-dancing text-xl mt-1" style="color: var(--pink-accent);"><span id="reasonsSubtitle">...and counting ✨</span></p>
+      </div>
+      <div class="space-y-4 mb-8">
+        <div class="reason-card" style="animation-delay: 0.1s;">
+          <div class="flex items-start gap-3"><span class="text-2xl">😊</span><div><p class="font-semibold text-sm" style="color: var(--text-mid);">Reason #01</p><p class="text-sm mt-1" style="color: var(--text-dark);">Your smile lights up every room you walk into. It's genuinely contagious! 🌟</p></div></div>
+        </div>
+        <div class="reason-card" style="animation-delay: 0.2s;">
+          <div class="flex items-start gap-3"><span class="text-2xl">💪</span><div><p class="font-semibold text-sm" style="color: var(--text-mid);">Reason #02</p><p class="text-sm mt-1" style="color: var(--text-dark);">You're stronger than you know. Watching you overcome challenges is inspiring every single time.</p></div></div>
+        </div>
+        <div class="reason-card" style="animation-delay: 0.3s;">
+          <div class="flex items-start gap-3"><span class="text-2xl">🤣</span><div><p class="font-semibold text-sm" style="color: var(--text-mid);">Reason #03</p><p class="text-sm mt-1" style="color: var(--text-dark);">Your sense of humor is unmatched. You make me laugh even on my worst days 😂💕</p></div></div>
+        </div>
+        <div class="reason-card" style="animation-delay: 0.4s;">
+          <div class="flex items-start gap-3"><span class="text-2xl">🌺</span><div><p class="font-semibold text-sm" style="color: var(--text-mid);">Reason #04</p><p class="text-sm mt-1" style="color: var(--text-dark);">You care so deeply for the people you love. Your heart is pure gold ✨</p></div></div>
+        </div>
+        <div class="reason-card" style="animation-delay: 0.5s;">
+          <div class="flex items-start gap-3"><span class="text-2xl">🌙</span><div><p class="font-semibold text-sm" style="color: var(--text-mid);">Reason #05</p><p class="text-sm mt-1" style="color: var(--text-dark);">You make ordinary moments feel magical. Life with you is a beautiful adventure 🌙</p></div></div>
+        </div>
+        <div class="reason-card" style="animation-delay: 0.6s;">
+          <div class="flex items-start gap-3"><span class="text-2xl">🎯</span><div><p class="font-semibold text-sm" style="color: var(--text-mid);">Reason #06</p><p class="text-sm mt-1" style="color: var(--text-dark);">You never give up. Your determination and passion are absolutely breathtaking 🏆</p></div></div>
+        </div>
+      </div>
+      <div class="card-cute p-6 text-center mb-6">
+        <p class="text-xs uppercase tracking-widest mb-1" style="color: var(--text-light);">🌸 Three Wishes</p>
+        <h3 class="font-playfair text-xl font-bold mb-1" style="color: var(--text-dark);">A tiny bouquet of birthday wishes</h3>
+        <p class="text-xs mb-6" style="color: var(--text-light);">Pick each flower — there's a wish inside 🌸</p>
+        <div class="flex justify-center gap-8" id="flowerContainer">
+          <div class="flower-btn text-center" onclick="pickFlower(this, '🌸 Wish 1: May all your dreams bloom this year!')">
+            <svg width="60" height="60" viewBox="0 0 60 60"><circle cx="30" cy="30" r="8" fill="#FFB6D3"/><ellipse cx="30" cy="14" rx="7" ry="10" fill="#FFD4E8" opacity="0.8"/><ellipse cx="30" cy="46" rx="7" ry="10" fill="#FFD4E8" opacity="0.8"/><ellipse cx="14" cy="30" rx="10" ry="7" fill="#FFD4E8" opacity="0.8"/><ellipse cx="46" cy="30" rx="10" ry="7" fill="#FFD4E8" opacity="0.8"/><ellipse cx="18" cy="18" rx="7" ry="10" fill="#FFB6D3" opacity="0.6" transform="rotate(45 18 18)"/><ellipse cx="42" cy="18" rx="7" ry="10" fill="#FFB6D3" opacity="0.6" transform="rotate(-45 42 18)"/><ellipse cx="18" cy="42" rx="7" ry="10" fill="#FFB6D3" opacity="0.6" transform="rotate(-45 18 42)"/><ellipse cx="42" cy="42" rx="7" ry="10" fill="#FFB6D3" opacity="0.6" transform="rotate(45 42 42)"/><circle cx="30" cy="30" r="7" fill="#FF7BAC"/><circle cx="30" cy="30" r="4" fill="#FFD700"/></svg>
+            <p class="text-xs mt-1 font-semibold" style="color: var(--text-light);">PICK ME</p>
+          </div>
+          <div class="flower-btn text-center" onclick="pickFlower(this, '💫 Wish 2: May joy find you in every corner of life!')">
+            <svg width="60" height="60" viewBox="0 0 60 60"><circle cx="30" cy="30" r="8" fill="#E8B4D8"/><ellipse cx="30" cy="13" rx="6" ry="10" fill="#EDD5EC" opacity="0.8"/><ellipse cx="30" cy="47" rx="6" ry="10" fill="#EDD5EC" opacity="0.8"/><ellipse cx="13" cy="30" rx="10" ry="6" fill="#EDD5EC" opacity="0.8"/><ellipse cx="47" cy="30" rx="10" ry="6" fill="#EDD5EC" opacity="0.8"/><ellipse cx="17" cy="17" rx="6" ry="10" fill="#E8B4D8" opacity="0.6" transform="rotate(45 17 17)"/><ellipse cx="43" cy="17" rx="6" ry="10" fill="#E8B4D8" opacity="0.6" transform="rotate(-45 43 17)"/><ellipse cx="17" cy="43" rx="6" ry="10" fill="#E8B4D8" opacity="0.6" transform="rotate(-45 17 43)"/><ellipse cx="43" cy="43" rx="6" ry="10" fill="#E8B4D8" opacity="0.6" transform="rotate(45 43 43)"/><circle cx="30" cy="30" r="7" fill="#C06090"/><circle cx="30" cy="30" r="4" fill="#FFD700"/></svg>
+            <p class="text-xs mt-1 font-semibold" style="color: var(--text-light);">PICK ME</p>
+          </div>
+          <div class="flower-btn text-center" onclick="pickFlower(this, '🌟 Wish 3: May love surround you always!')">
+            <svg width="60" height="60" viewBox="0 0 60 60"><circle cx="30" cy="30" r="8" fill="#FFCBA4"/><ellipse cx="30" cy="12" rx="7" ry="11" fill="#FFE4C8" opacity="0.8"/><ellipse cx="30" cy="48" rx="7" ry="11" fill="#FFE4C8" opacity="0.8"/><ellipse cx="12" cy="30" rx="11" ry="7" fill="#FFE4C8" opacity="0.8"/><ellipse cx="48" cy="30" rx="11" ry="7" fill="#FFE4C8" opacity="0.8"/><ellipse cx="16" cy="16" rx="7" ry="11" fill="#FFCBA4" opacity="0.6" transform="rotate(45 16 16)"/><ellipse cx="44" cy="16" rx="7" ry="11" fill="#FFCBA4" opacity="0.6" transform="rotate(-45 44 16)"/><ellipse cx="16" cy="44" rx="7" ry="11" fill="#FFCBA4" opacity="0.6" transform="rotate(-45 16 44)"/><ellipse cx="44" cy="44" rx="7" ry="11" fill="#FFCBA4" opacity="0.6" transform="rotate(45 44 44)"/><circle cx="30" cy="30" r="7" fill="#FFA726"/><circle cx="30" cy="30" r="4" fill="#FFD700"/></svg>
+            <p class="text-xs mt-1 font-semibold" style="color: var(--text-light);">PICK ME</p>
+          </div>
+        </div>
+        <p id="wishReveal" class="font-dancing text-xl mt-4 hidden" style="color: var(--pink-accent);"></p>
+      </div>
+      <div class="text-center">
+        <button class="btn-pink" onclick="goToPage('page-gift')">Open Your Gift Box 🎁</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================== -->
+<!-- PAGE 5: ANIMATED GIFT BOX                -->
+<!-- ======================================== -->
+<div id="page-gift" class="page">
+  <div class="min-h-screen flex flex-col" style="background: linear-gradient(135deg, #FFF0F7 0%, var(--pink-soft) 50%, #FFF8F3 100%);">
+    <div class="max-w-lg mx-auto px-4 py-8 flex-1 flex flex-col">
+      <div id="giftStep1" class="flex-1 flex flex-col">
+        <div class="text-center mb-6">
+          <div class="text-3xl mb-2 float-anim">🎂</div>
+          <h2 class="font-playfair text-3xl font-bold" style="color: var(--text-dark);">Blow the candle, <span id="giftCandleName" style="color: var(--pink-accent);">Beautiful</span> 🕯️</h2>
+          <p class="font-dancing text-lg mt-1" style="color: var(--text-light);">Make a wish before you open your gift!</p>
+        </div>
+        <div class="flex justify-center mb-6">
+          <div class="relative" style="width:220px; height:240px;">
+            <svg id="cakeSvg" width="220" height="240" viewBox="0 0 220 240" class="illustration">
+              <defs>
+                <linearGradient id="cakeBottomGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#8B5E3C"/><stop offset="100%" style="stop-color:#6D4828"/></linearGradient>
+                <linearGradient id="cakeMidGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#C8956C"/><stop offset="100%" style="stop-color:#A8754C"/></linearGradient>
+              </defs>
+              <ellipse cx="110" cy="222" rx="70" ry="10" fill="#FFB6D3" opacity="0.3"/>
+              <rect x="20" y="155" width="180" height="55" rx="12" fill="url(#cakeBottomGrad)"/>
+              <rect x="20" y="155" width="180" height="18" rx="9" fill="white"/>
+              <ellipse cx="44" cy="173" rx="8" ry="12" fill="white"/><ellipse cx="70" cy="175" rx="8" ry="13" fill="white"/><ellipse cx="96" cy="173" rx="8" ry="12" fill="white"/><ellipse cx="122" cy="175" rx="8" ry="13" fill="white"/><ellipse cx="148" cy="173" rx="8" ry="12" fill="white"/><ellipse cx="174" cy="175" rx="8" ry="13" fill="white"/>
+              <rect x="40" y="185" width="12" height="4" rx="2" fill="#FF7BAC" transform="rotate(-15 40 185)"/><rect x="75" y="190" width="12" height="4" rx="2" fill="#FFD700" transform="rotate(20 75 190)"/><rect x="110" y="185" width="12" height="4" rx="2" fill="#7C4DFF" transform="rotate(-5 110 185)"/><rect x="145" y="190" width="12" height="4" rx="2" fill="#00BCD4" transform="rotate(15 145 190)"/><rect x="57" y="200" width="10" height="4" rx="2" fill="#FF6B9D" transform="rotate(10 57 200)"/><rect x="130" y="200" width="10" height="4" rx="2" fill="#FFB6D3" transform="rotate(-20 130 200)"/>
+              <rect x="42" y="105" width="136" height="55" rx="10" fill="url(#cakeMidGrad)"/>
+              <rect x="42" y="105" width="136" height="16" rx="8" fill="white"/>
+              <ellipse cx="62" cy="121" rx="7" ry="11" fill="white"/><ellipse cx="84" cy="123" rx="7" ry="12" fill="white"/><ellipse cx="110" cy="121" rx="7" ry="11" fill="white"/><ellipse cx="136" cy="123" rx="7" ry="12" fill="white"/><ellipse cx="158" cy="121" rx="7" ry="11" fill="white"/>
+              <circle cx="70" cy="135" r="8" fill="#FF7BAC"/><circle cx="70" cy="135" r="5" fill="#FF9CC2"/>
+              <circle cx="110" cy="135" r="8" fill="#FF7BAC"/><circle cx="110" cy="135" r="5" fill="#FF9CC2"/>
+              <circle cx="150" cy="135" r="8" fill="#FF7BAC"/><circle cx="150" cy="135" r="5" fill="#FF9CC2"/>
+              <rect x="103" y="60" width="14" height="48" rx="5" fill="#E8477A"/>
+              <rect x="103" y="68" width="14" height="4" fill="white" opacity="0.3"/><rect x="103" y="80" width="14" height="4" fill="white" opacity="0.3"/><rect x="103" y="92" width="14" height="4" fill="white" opacity="0.3"/>
+              <line x1="110" y1="60" x2="110" y2="52" stroke="#5C3A1E" stroke-width="2"/>
+              <g id="flameGroup">
+                <ellipse cx="110" cy="44" rx="7" ry="11" fill="#FFD700" opacity="0.9"><animateTransform attributeName="transform" type="translate" values="0,0; -1,-2; 1,-1; 0,0" dur="0.8s" repeatCount="indefinite"/></ellipse>
+                <ellipse cx="110" cy="47" rx="4.5" ry="7" fill="#FFA726"><animateTransform attributeName="transform" type="translate" values="0,0; 1,-1; -1,-2; 0,0" dur="0.6s" repeatCount="indefinite"/></ellipse>
+                <ellipse cx="110" cy="50" rx="2" ry="4" fill="white" opacity="0.7"/>
+              </g>
+              <g id="smokeGroup" opacity="0" style="transition:opacity 0.5s;">
+                <ellipse cx="110" cy="42" rx="3" ry="5" fill="#ccc" opacity="0.6"/>
+                <ellipse cx="112" cy="34" rx="3" ry="5" fill="#ddd" opacity="0.4"/>
+                <ellipse cx="108" cy="26" rx="3" ry="5" fill="#eee" opacity="0.3"/>
+              </g>
+              <text x="10" y="80" font-size="16">⭐</text><text x="186" y="80" font-size="16">⭐</text>
+              <text x="6" y="145" font-size="14">✨</text><text x="192" y="145" font-size="14">✨</text>
+              <text x="20" y="225" font-size="12">🌸</text><text x="185" y="225" font-size="12">🌸</text>
+            </svg>
+          </div>
+        </div>
+        <div class="text-center mt-2">
+          <button id="blowCandleBtn" class="btn-pink shine-effect" onclick="blowGiftCandle()">🌬️ Tap to blow the candle</button>
+          <p class="text-xs mt-2" style="color: var(--text-light);">Close your eyes and make a wish ✨</p>
+        </div>
+      </div>
+      <div id="giftStep2" class="hidden flex-1 flex flex-col">
+        <div class="text-center mb-6">
+          <div class="text-3xl mb-2">🎀</div>
+          <h2 class="font-playfair text-2xl font-bold" style="color: var(--text-dark);">Now open your gift! 🎁</h2>
+          <p class="font-dancing text-lg mt-1" style="color: var(--pink-accent);">Tap the box to reveal your surprise</p>
+        </div>
+        <div class="flex-1 flex items-center justify-center">
+          <div id="giftBoxContainer" onclick="openGiftBox()" style="cursor: pointer;">
+            <div id="giftClosed" class="relative float-anim">
+              <svg width="200" height="220" viewBox="0 0 200 220" class="illustration">
+                <defs>
+                  <linearGradient id="boxGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF7BAC"/><stop offset="100%" style="stop-color:#E8477A"/></linearGradient>
+                  <linearGradient id="lidGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF9CC2"/><stop offset="100%" style="stop-color:#FF7BAC"/></linearGradient>
+                </defs>
+                <rect x="20" y="100" width="160" height="110" rx="8" fill="url(#boxGrad)"/>
+                <rect x="90" y="100" width="20" height="110" fill="white" opacity="0.25"/>
+                <rect x="10" y="80" width="180" height="30" rx="6" fill="url(#lidGrad)"/>
+                <rect x="80" y="70" width="40" height="45" rx="6" fill="#FFB6D3"/>
+                <ellipse cx="85" cy="68" rx="20" ry="14" fill="#FFD4E8" transform="rotate(-20 85 68)"/>
+                <ellipse cx="115" cy="68" rx="20" ry="14" fill="#FFD4E8" transform="rotate(20 115 68)"/>
+                <circle cx="100" cy="68" r="10" fill="#FF7BAC"/>
+                <circle cx="100" cy="68" r="6" fill="#E8477A"/>
+                <text x="40" y="150" font-size="20" opacity="0.3">⭐</text>
+                <text x="140" y="170" font-size="16" opacity="0.3">✨</text>
+                <text x="50" y="185" font-size="14" opacity="0.3">🌸</text>
+                <text x="100" y="218" text-anchor="middle" font-family="Nunito" font-size="12" fill="#FF7BAC">Tap to open! ✨</text>
+              </svg>
+            </div>
+            <div id="giftOpened" class="hidden text-center">
+              <div class="text-6xl mb-4 heart-pulse">🎊</div>
+              <div class="card-cute p-8 max-w-sm mx-auto" style="background: linear-gradient(135deg, white, var(--pink-soft));">
+                <div class="text-4xl mb-4">💝</div>
+                <h3 class="font-playfair text-2xl font-bold mb-2" style="color: var(--text-dark);">Happy Birthday <span id="giftRecipientName" style="color: var(--pink-accent);">Beautiful!</span></h3>
+                <p class="font-dancing text-lg mb-4" style="color: var(--pink-accent);">You are cherished more than words can say 💕</p>
+                <div class="divider-hearts">♥ ♥ ♥</div>
+                <p class="text-sm mt-3" style="color: var(--text-mid);">May this year bring you endless joy, love, laughter, and all the beautiful things you deserve. 🌸</p>
+                <div class="flex justify-center gap-4 mt-4 text-2xl">
+                  <span class="sticker">🎂</span><span class="heart-pulse">💖</span><span class="float-anim">🌸</span><span class="sticker">🎀</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- CREATOR sees Preview button; RECIPIENT sees a final note -->
+        <div class="text-center mt-6" id="giftNextBtn">
+          <button class="btn-pink" onclick="goToPage('page-preview')">Preview Full Website 👀</button>
+          <p class="text-xs mt-2" style="color: var(--text-light);">See everything before sharing!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================== -->
+<!-- PAGE 6: FULL PREVIEW                     -->
+<!-- ======================================== -->
+<div id="page-preview" class="page">
+  <div class="min-h-screen" style="background: var(--blush);">
+    <div class="preview-banner">🎉 FULL PREVIEW — Everything looks perfect? Unlock & Share! 🎉</div>
+    <div class="max-w-lg mx-auto px-4 py-6">
+      <div class="text-center mb-6">
+        <div class="text-4xl mb-2">👀</div>
+        <h2 class="font-playfair text-2xl font-bold" style="color: var(--text-dark);">Your Birthday Website</h2>
+        <p class="text-sm mt-1" style="color: var(--text-light);">Here's what <span id="previewRecipient" class="font-semibold" style="color: var(--pink-accent);">your person</span> will see 💕</p>
+      </div>
+      <div class="space-y-4 mb-8">
+        <div class="card-cute p-4"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full flex items-center justify-center text-xl" style="background: var(--pink-soft);">🎂</div><div><p class="font-semibold text-sm" style="color: var(--text-dark);">Welcome Page</p><p class="text-xs" style="color: var(--text-light);">Personalised birthday greeting with cute kitten</p></div><span class="ml-auto text-green-500 text-lg">✅</span></div></div>
+        <div class="card-cute p-4"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full flex items-center justify-center text-xl" style="background: var(--pink-soft);">🧸</div><div><p class="font-semibold text-sm" style="color: var(--text-dark);">Memory Cards</p><p class="text-xs" style="color: var(--text-light);">4 flip cards with sweet messages</p></div><span class="ml-auto text-green-500 text-lg">✅</span></div></div>
+        <div class="card-cute p-4"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full flex items-center justify-center text-xl" style="background: var(--pink-soft);">💌</div><div><p class="font-semibold text-sm" style="color: var(--text-dark);">Birthday Letter</p><p class="text-xs" style="color: var(--text-light);">Personalised love letter with your message</p></div><span class="ml-auto text-green-500 text-lg">✅</span></div></div>
+        <div class="card-cute p-4"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full flex items-center justify-center text-xl" style="background: var(--pink-soft);">💝</div><div><p class="font-semibold text-sm" style="color: var(--text-dark);">6 Appreciation Reasons + 3 Wishes</p><p class="text-xs" style="color: var(--text-light);">Heartfelt cards + interactive flower wishes</p></div><span class="ml-auto text-green-500 text-lg">✅</span></div></div>
+        <div class="card-cute p-4"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full flex items-center justify-center text-xl" style="background: var(--pink-soft);">🎁</div><div><p class="font-semibold text-sm" style="color: var(--text-dark);">Animated Gift Box</p><p class="text-xs" style="color: var(--text-light);">Interactive surprise reveal with confetti</p></div><span class="ml-auto text-green-500 text-lg">✅</span></div></div>
+        <div class="card-cute p-4"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full flex items-center justify-center text-xl" style="background: var(--pink-soft);">🎵</div><div><p class="font-semibold text-sm" style="color: var(--text-dark);">Background Music + Confetti</p><p class="text-xs" style="color: var(--text-light);">Soft music & celebration effects</p></div><span class="ml-auto text-green-500 text-lg">✅</span></div></div>
+      </div>
+      <div class="card-cute p-5 mb-6" style="background: linear-gradient(135deg, white, var(--pink-soft));">
+        <h3 class="font-semibold mb-3 text-center" style="color: var(--text-dark);">Website Summary 📋</h3>
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between"><span style="color: var(--text-light);">Created by:</span><span class="font-semibold" style="color: var(--text-dark);" id="summarySender">—</span></div>
+          <div class="flex justify-between"><span style="color: var(--text-light);">For:</span><span class="font-semibold" style="color: var(--pink-accent);" id="summaryRecipient">—</span></div>
+          <div class="flex justify-between"><span style="color: var(--text-light);">Pages:</span><span class="font-semibold" style="color: var(--text-dark);">5 Beautiful Pages</span></div>
+          <div class="flex justify-between"><span style="color: var(--text-light);">Shareable Link:</span><span class="font-semibold text-green-600">✅ Included</span></div>
+        </div>
+      </div>
+      <div class="text-center">
+        <button class="btn-pink w-full shine-effect" onclick="goToPage('page-checkout')">🔓 Unlock & Share — ₹299 only!</button>
+        <p class="text-xs mt-2" style="color: var(--text-light);">One-time payment · Lifetime access link 💕</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================== -->
+<!-- PAGE 7: CHECKOUT                         -->
+<!-- ======================================== -->
+<div id="page-checkout" class="page">
+  <div class="min-h-screen" style="background: linear-gradient(160deg, var(--blush) 0%, white 100%);">
+    <div class="max-w-lg mx-auto px-4 py-8">
+      <div class="text-center mb-6">
+        <div class="text-4xl mb-2">🔒</div>
+        <h2 class="font-playfair text-2xl font-bold" style="color: var(--text-dark);">Unlock Birthday Magic</h2>
+        <p class="text-sm mt-1" style="color: var(--text-light);">One-time payment, lifetime link ✨</p>
+      </div>
+      <div class="card-cute p-5 mb-5 relative">
+        <div class="ribbon">POPULAR</div>
+        <h3 class="font-semibold mb-4" style="color: var(--text-dark);">Order Summary 🎂</h3>
+        <div class="space-y-3">
+          <div class="flex justify-between text-sm"><span style="color: var(--text-mid);">Birthday Surprise Website</span><span class="font-semibold line-through" style="color: var(--text-light);">₹599</span></div>
+          <div class="flex justify-between text-sm"><span style="color: var(--text-mid);">Personalisation (5 pages)</span><span class="font-semibold" style="color: var(--text-dark);">Included</span></div>
+          <div class="flex justify-between text-sm"><span style="color: var(--text-mid);">Shareable Link (Lifetime)</span><span class="font-semibold" style="color: var(--text-dark);">Included</span></div>
+          <div class="flex justify-between text-sm"><span style="color: var(--text-mid);">Background Music</span><span class="font-semibold" style="color: var(--text-dark);">Included</span></div>
+          <div id="discountRow" class="hidden flex justify-between text-sm"><span class="text-green-600 font-semibold">🎉 Discount Applied!</span><span class="text-green-600 font-semibold" id="discountAmount">-₹100</span></div>
+          <hr style="border-color: var(--pink-soft);"/>
+          <div class="flex justify-between font-bold text-base"><span style="color: var(--text-dark);">Total</span><span style="color: var(--pink-accent);" id="totalAmount">₹299</span></div>
+        </div>
+      </div>
+      <div class="card-cute p-4 mb-5">
+        <label class="block text-sm font-semibold mb-2" style="color: var(--text-mid);">🏷️ Have a discount code?</label>
+        <div class="flex gap-2">
+          <input type="text" id="couponInput" class="coupon-input" placeholder="e.g. BDAY50"/>
+          <button class="btn-outline" onclick="applyCoupon()" style="white-space: nowrap; padding: 10px 20px; font-size: 0.9rem;">Apply</button>
+        </div>
+        <p id="couponMsg" class="text-xs mt-2 hidden"></p>
+      </div>
+      <div class="flex justify-center gap-6 mb-6">
+        <div class="text-center"><div class="text-2xl">🔐</div><p class="text-xs mt-1" style="color: var(--text-light);">Secure Pay</p></div>
+        <div class="text-center"><div class="text-2xl">⚡</div><p class="text-xs mt-1" style="color: var(--text-light);">Instant Link</p></div>
+        <div class="text-center"><div class="text-2xl">♾️</div><p class="text-xs mt-1" style="color: var(--text-light);">Lifetime Access</p></div>
+        <div class="text-center"><div class="text-2xl">💯</div><p class="text-xs mt-1" style="color: var(--text-light);">100% Safe</p></div>
+      </div>
+      <button class="btn-pink w-full shine-effect text-lg" onclick="initiatePayment()">🎀 Pay with Razorpay</button>
+      <p class="text-center text-xs mt-3" style="color: var(--text-light);">Powered by Razorpay · UPI · Cards · NetBanking</p>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================== -->
+<!-- PAGE 8: SUCCESS / SHARE LINK             -->
+<!-- ======================================== -->
+<div id="page-success" class="page">
+  <div class="min-h-screen" style="background: linear-gradient(135deg, var(--pink-soft) 0%, white 50%, var(--lavender) 100%);">
+    <div class="max-w-lg mx-auto px-4 py-8">
+      <div class="text-center mb-6">
+        <div class="text-5xl mb-3 float-anim">🎉</div>
+        <h2 class="font-playfair text-3xl font-bold" style="color: var(--text-dark);">Payment Successful!</h2>
+        <p class="font-dancing text-xl mt-1" style="color: var(--pink-accent);">Your birthday surprise is ready! 🎀</p>
+      </div>
+      <div class="card-cute p-6 mb-6">
+        <div class="text-center mb-4">
+          <div class="text-3xl mb-2">🔗</div>
+          <p class="font-semibold" style="color: var(--text-dark);">Your Unique Shareable Link</p>
+          <p class="text-xs mt-1" style="color: var(--text-light);">Share this with <span id="successRecipient" class="font-semibold" style="color: var(--pink-accent);">them</span>! ✨</p>
+        </div>
+        <div class="link-box mb-4" id="shareableLink">generating...</div>
+        <div class="flex gap-3">
+          <button class="btn-pink flex-1" onclick="copyLink()">📋 Copy Link</button>
+          <button class="btn-outline flex-1" onclick="shareWhatsApp()">💬 WhatsApp</button>
+        </div>
+        <p id="copiedMsg" class="text-center text-xs mt-2 text-green-600 hidden font-semibold">✅ Copied to clipboard!</p>
+      </div>
+      <div class="card-cute p-4 mb-6" style="background: linear-gradient(135deg, white, var(--pink-soft));">
+        <p class="text-sm font-semibold mb-2" style="color: var(--text-dark);">🎀 What they'll experience:</p>
+        <ul class="space-y-1 text-xs" style="color: var(--text-mid);">
+          <li>✨ Personalised birthday greeting page</li>
+          <li>✨ Interactive flip memory cards</li>
+          <li>✨ Handwritten-style birthday letter</li>
+          <li>✨ Reasons I love you cards + flower wishes</li>
+          <li>✨ Animated gift box surprise</li>
+          <li>✨ Soft background music</li>
+          <li>✨ No payment screens — pure love only 💕</li>
+        </ul>
+      </div>
+      <div class="text-center p-4 rounded-2xl mb-6" style="background: var(--pink-soft);">
+        <p class="text-sm" style="color: var(--text-mid);">💡 <strong>Save this link!</strong> Copy it or share it directly via WhatsApp.<br/><span class="text-xs" style="color: var(--text-light);">The link works as long as this HTML file is accessible.</span></p>
+      </div>
+      <div class="text-center">
+        <div class="flex justify-center gap-4 text-3xl mb-4">
+          <span class="sticker">🎂</span><span class="heart-pulse">💖</span><span class="float-anim">🌸</span><span class="emoji-bounce">🎊</span>
+        </div>
+        <p class="font-dancing text-xl" style="color: var(--pink-accent);">Made with ❤️ · Birthday Surprise</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================== -->
+<!-- SCRIPTS                                  -->
+<!-- ======================================== -->
 <script>
-// ── CONFIG ── Replace with your actual Razorpay key ──
-var RAZORPAY_KEY = 'rzp_live_SvD983baZpuP2A';
-
-// GIF files — place gif1.gif, gif2.gif, gif3.gif, gif4.gif in same folder as index.html
-var GIF_FILES = ['gif1.webp','gif2.webp','gif3.webp','gif4.webp'];
-var GIF_FALLBACK_EMOJI = ['🌸','💫','🎉','💕'];
-
-var COUPONS = {
-  'FREELOVE':{ discount:99, label:'100% off — Free!', free:true },
-  'LOVE1':   { discount:98, label:'₹98 off — pay just ₹1', free:false },
-  'LOVE59':  { discount:40, label:'₹40 off — pay ₹59', free:false }
+// ===== STATE =====
+const state = {
+  sender: '', recipient: '', message: '',
+  discount: 0, basePrice: 299, finalPrice: 299,
+  musicPlaying: false,
+  isRecipientView: false
 };
 
-var BALLOON_COLORS=['#f9d0d8','#c8b3f5','#b3d9f5','#f5c8b3'];
-var BALLOON_STROKES=['#d4627e','#8b6fbe','#3a8fbe','#d47e3e'];
-var CONFETTI_COLORS=['#f9d0d8','#d4627e','#c8b3f5','#f7c66a','#b3d9f5','#fce8ee'];
+const COUPONS = { 'BDAY50': 50, 'LOVE100': 100, 'SURPRISE30': 30, 'BDAY2024': 75, 'SWEET50': 50, 'LOVE1': 298, 'FREEBDAY': 299 };
 
-function randId(){return 'bday-'+Math.random().toString(36).slice(2,8)+Date.now().toString(36).slice(-4);}
-
-function launchConfetti(){
-  for(var i=0;i<70;i++){
-    (function(delay){
-      setTimeout(function(){
-        var el=document.createElement('div');
-        el.className='confetti-piece';
-        var size=6+Math.random()*8;
-        el.style.cssText='left:'+Math.random()*100+'vw;background:'+CONFETTI_COLORS[Math.floor(Math.random()*CONFETTI_COLORS.length)]+';animation-duration:'+(1.5+Math.random()*2.5)+'s;animation-delay:'+Math.random()*.5+'s;width:'+size+'px;height:'+size+'px;border-radius:'+(Math.random()>.5?'50%':'3px')+';';
-        document.body.appendChild(el);
-        setTimeout(function(){el.remove();},4000);
-      },delay);
-    })(i*30);
+// ===== ENCODE / DECODE HELPERS =====
+function encodeState(data) {
+  try {
+    return btoa(encodeURIComponent(JSON.stringify(data)));
+  } catch(e) {
+    return btoa(JSON.stringify(data));
   }
 }
 
-function playPop(){
-  try{
-    var ctx=new(window.AudioContext||window.webkitAudioContext)();
-    var o=ctx.createOscillator(),g=ctx.createGain();
-    o.connect(g);g.connect(ctx.destination);
-    o.type='sine';
-    o.frequency.setValueAtTime(700,ctx.currentTime);
-    o.frequency.exponentialRampToValueAtTime(60,ctx.currentTime+0.18);
-    g.gain.setValueAtTime(0.6,ctx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.22);
-    o.start(ctx.currentTime);o.stop(ctx.currentTime+0.22);
-  }catch(e){}
-}
-
-function makeHeartsBackground(){
-  var symbols=['❤️','💕','💗','🌸','✨','💫','🌺','💖','🌷','⭐'];
-  var bg=document.createElement('div');bg.className='hearts-bg';
-  for(var i=0;i<18;i++){
-    var s=document.createElement('span');
-    s.className='heart-float';
-    s.style.cssText='left:'+Math.random()*100+'%;animation-duration:'+(8+Math.random()*10)+'s;animation-delay:'+Math.random()*14+'s;font-size:'+(10+Math.random()*10)+'px';
-    s.textContent=symbols[Math.floor(Math.random()*symbols.length)];
-    bg.appendChild(s);
+function decodeState(encoded) {
+  try {
+    return JSON.parse(decodeURIComponent(atob(encoded)));
+  } catch(e) {
+    try { return JSON.parse(atob(encoded)); } catch(e2) { return null; }
   }
-  return bg;
 }
 
-function makeBalloonSVG(color,stroke){
-  var ns='http://www.w3.org/2000/svg';
-  var svg=document.createElementNS(ns,'svg');
-  svg.setAttribute('viewBox','0 0 80 110');
-  svg.setAttribute('width','80');svg.setAttribute('height','110');
-  svg.innerHTML='<ellipse cx="40" cy="42" rx="30" ry="36" fill="'+color+'" stroke="'+stroke+'" stroke-width="1.5"/><ellipse cx="30" cy="30" rx="9" ry="7" fill="white" opacity="0.35"/><ellipse cx="36" cy="24" rx="4" ry="3" fill="white" opacity="0.2"/><path d="M40 78 Q38 85 40 92 Q42 99 40 106" stroke="'+stroke+'" stroke-width="1.5" fill="none" stroke-linecap="round"/><polygon points="35,78 40,88 45,78" fill="'+stroke+'" opacity="0.7"/>';
-  return svg;
+// ===== PAGE NAVIGATION =====
+function goToPage(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(pageId).classList.add('active');
+  window.scrollTo(0, 0);
+  if (pageId === 'page-letter') updateLetterPage();
+  if (pageId === 'page-reasons') updateReasonsPage();
+  if (pageId === 'page-gift') updateGiftPage();
+  if (pageId === 'page-preview') updatePreviewPage();
+  if (pageId === 'page-success') showSuccessPage();
 }
 
-function makeCakeSVG(blown,onClick){
-  var ns='http://www.w3.org/2000/svg';
-  var svg=document.createElementNS(ns,'svg');
-  svg.setAttribute('viewBox','0 0 120 120');
-  svg.setAttribute('class','cake-svg');
-  svg.onclick=onClick;
-  svg.innerHTML='<rect x="8" y="68" width="104" height="42" rx="10" fill="#f5c6cb"/><rect x="8" y="68" width="104" height="18" rx="10" fill="#f9d0d8"/><path d="M8 76 Q18 68 28 76 Q38 84 48 76 Q58 68 68 76 Q78 84 88 76 Q98 68 108 76" stroke="white" stroke-width="7" fill="none" stroke-linecap="round"/><rect x="54" y="44" width="12" height="27" rx="3" fill="#e74c7c"/>'+(blown?'<text x="46" y="38" font-size="16">💨</text>':'<g class="candle-flame"><ellipse cx="60" cy="36" rx="7" ry="10" fill="#f7c66a"/><ellipse cx="60" cy="39" rx="4" ry="6" fill="#f97316"/><ellipse cx="60" cy="42" rx="2" ry="3" fill="white" opacity="0.6"/></g>')+'<text x="14" y="63" font-size="12" opacity="0.45">✦</text><text x="90" y="58" font-size="10" opacity="0.35">✦</text><text x="28" y="96" font-size="11" fill="white" opacity="0.65">🎂</text>';
-  return svg;
+// ===== START JOURNEY =====
+function startJourney() {
+  const sender = document.getElementById('senderName').value.trim();
+  const recipient = document.getElementById('recipientName').value.trim();
+  const message = document.getElementById('customMessage').value.trim();
+  if (!sender || !recipient) {
+    alert('💕 Please enter both names to continue!');
+    return;
+  }
+  state.sender = sender;
+  state.recipient = recipient;
+  state.message = message || "You mean the world to me! Wishing you a day as beautiful as you are 💕";
+  launchConfetti();
+  setTimeout(() => goToPage('page-storybook'), 300);
 }
 
-function buildBirthdaySite(data,container,inPreview){
-  var name=data.recipientName||'Birthday Star';
-  var sender=data.senderName||'Someone who loves you';
-  var msg=data.message||('Dearest '+name+',\n\nToday is all about you — the most wonderful person in my world. I hope this day fills your heart with as much joy as you bring to mine every single day.\n\nHappy Birthday! 🎉');
-  var wishes=[
-    data.wish1||'I wish you a year overflowing with adventure, laughter, and all things beautiful.',
-    data.wish2||'I wish you joy in every small moment — sunsets, warm drinks, and belly laughs.',
-    data.wish3||'I wish you always know how deeply, truly loved you are.'
-  ];
-  var balloonMsgs=[
-    data.balloon1||'You light up every room you enter ✨',
-    data.balloon2||'Your smile is my favourite thing 💕',
-    data.balloon3||'You deserve all the magic today 🌸',
-    data.balloon4||'I\'m so lucky to have you in my life 🎀'
-  ];
-
-  var blown=false;
-  var popped=[false,false,false,false];
-
-  container.innerHTML='<div class="bday-hero"><div class="bday-to-label">✦ A BIRTHDAY SURPRISE FOR ✦</div><div class="bday-name">'+name+'</div><div class="bday-subtitle">From '+sender+', with all my heart 💕</div><div class="sparkle-row"><span class="spark">✨</span><span class="spark">🌸</span><span class="spark">✨</span></div></div>'
-  +'<div class="cake-section"><div class="cake-wrap" id="ck-wrap"></div><div id="ck-msg"></div></div>'
-  +'<div class="bday-letter"><div class="letter-label">✦ A LETTER, JUST FOR YOU ✦</div><div class="letter-text">'+msg+'</div><div class="letter-sign">'+sender+' 💕</div></div>'
-  +'<div class="balloon-section"><div class="balloon-section-title">Pop the Balloons 🎈</div><div class="balloon-section-sub">Each one hides a little surprise just for you</div><div class="balloon-arena" id="b-arena"></div></div>'
-  +'<div class="wishes-section" id="wish-sec"><div class="wishes-title">A Bouquet of Wishes for You 🌸</div>'
-  +wishes.map(function(w,i){return '<div class="wish-card" id="wc'+i+'"><div class="wish-icon">'+['🌸','🌺','🌷'][i]+'</div><div class="wish-text">'+w+'</div></div>';}).join('')
-  +'</div>'
-  +'<div class="bday-footer"><span class="footer-heart">💖</span><div class="footer-text">Happy Birthday, '+name+'!<br/>Today and always — you are so loved.</div><div style="margin-top:20px;font-size:13px;color:var(--text-soft)">Made with love by '+sender+' ✨</div></div>'
-  +(!inPreview?'<button class="music-fab" id="mfab">🎵</button>':'');
-
-  // Cake
-  var ckWrap=container.querySelector('#ck-wrap');
-  var ckMsg=container.querySelector('#ck-msg');
-  function renderCake(){
-    ckWrap.innerHTML='';
-    ckWrap.appendChild(makeCakeSVG(blown,blowCandle));
-    if(!blown){
-      ckMsg.innerHTML='<button class="cake-hint">🕯️ Tap to blow the candle</button>';
-      ckMsg.querySelector('button').onclick=blowCandle;
+// ===== UPDATE PAGES =====
+function updateLetterPage() {
+  document.getElementById('letterSubtitle').textContent = `For ${state.recipient} with love 💕`;
+  document.getElementById('customMsgDisplay').textContent = state.message;
+  document.getElementById('senderNameDisplay').textContent = `— ${state.sender} ❤️`;
+}
+function updateReasonsPage() {
+  document.getElementById('reasonsSubtitle').textContent = `for ${state.recipient} ✨`;
+}
+function updateGiftPage() {
+  document.getElementById('giftRecipientName').textContent = state.recipient + '!';
+  document.getElementById('giftCandleName').textContent = state.recipient;
+  // Reset
+  document.getElementById('giftStep1').classList.remove('hidden');
+  document.getElementById('giftStep2').classList.add('hidden');
+  document.getElementById('giftClosed').classList.remove('hidden');
+  document.getElementById('giftOpened').classList.add('hidden');
+  const flame = document.getElementById('flameGroup');
+  const smoke = document.getElementById('smokeGroup');
+  if (flame) flame.style.opacity = '1';
+  if (smoke) smoke.style.opacity = '0';
+  const blowBtn = document.getElementById('blowCandleBtn');
+  if (blowBtn) { blowBtn.textContent = '🌬️ Tap to blow the candle'; blowBtn.disabled = false; blowBtn.style.opacity = '1'; }
+  // Show/hide next button based on view
+  const nextBtn = document.getElementById('giftNextBtn');
+  if (nextBtn) {
+    if (state.isRecipientView) {
+      // Recipient: show a final love note instead of Preview button
+      nextBtn.innerHTML = `
+        <div class="card-cute p-4 mt-4 text-center" style="background: linear-gradient(135deg, white, var(--pink-soft));">
+          <p class="font-dancing text-2xl" style="color: var(--pink-accent);">Made with 💕 just for you</p>
+          <p class="text-sm mt-2" style="color: var(--text-mid);">From <strong>${state.sender}</strong>, with all my love 🌸</p>
+        </div>`;
     } else {
-      ckMsg.innerHTML='<div class="blownout-msg">Make a wish, '+name+'! 🎉</div>';
+      nextBtn.innerHTML = `
+        <button class="btn-pink" onclick="goToPage('page-preview')">Preview Full Website 👀</button>
+        <p class="text-xs mt-2" style="color: var(--text-light);">See everything before sharing!</p>`;
     }
   }
-  function blowCandle(){if(blown)return;blown=true;renderCake();launchConfetti();}
-  renderCake();
+}
+function updatePreviewPage() {
+  document.getElementById('previewRecipient').textContent = state.recipient;
+  document.getElementById('summarySender').textContent = state.sender;
+  document.getElementById('summaryRecipient').textContent = state.recipient;
+}
 
-  // Balloons
-  var arena=container.querySelector('#b-arena');
-  function renderBalloons(){
-    arena.innerHTML='';
-    var allPopped=popped.every(function(p){return p;});
-    for(var i=0;i<4;i++){
-      if(popped[i]){
-        // Polaroid card
-        var card=document.createElement('div');
-        card.className='balloon-card-wrap';
-        var mediaDiv=document.createElement('div');mediaDiv.className='balloon-card-media';
-        mediaDiv.textContent=GIF_FALLBACK_EMOJI[i];
-        // Try loading GIF
-        (function(idx,mdiv){
-          var img=new Image();
-          img.onload=function(){
-            mdiv.textContent='';
-            img.style.cssText='width:100%;height:100%;object-fit:cover;position:absolute;inset:0';
-            mdiv.style.position='relative';
-            mdiv.appendChild(img);
-          };
-          img.onerror=function(){};
-          img.src=GIF_FILES[idx];
-        })(i,mediaDiv);
-        var frameDiv=document.createElement('div');frameDiv.className='balloon-card-frame';
-        frameDiv.innerHTML='<div class="balloon-card-msg">'+balloonMsgs[i]+'</div><div class="balloon-card-from">'+sender+'</div>';
-        card.appendChild(mediaDiv);card.appendChild(frameDiv);
-        arena.appendChild(card);
-      } else {
-        var wrap=document.createElement('div');wrap.className='balloon-wrap';
-        var emoji=document.createElement('div');emoji.className='balloon-string-emoji';
-        emoji.textContent=['💕','✨','🌸','🎀'][i];
-        wrap.appendChild(emoji);
-        wrap.appendChild(makeBalloonSVG(BALLOON_COLORS[i],BALLOON_STROKES[i]));
-        (function(idx,w){
-          w.addEventListener('click',function(){
-            if(popped[idx])return;
-            playPop();
-            var burst=document.createElement('div');burst.className='pop-burst';burst.textContent='💥';
-            w.appendChild(burst);
-            setTimeout(function(){
-              popped[idx]=true;
-              renderBalloons();
-              if(popped.every(function(p){return p;})){
-                setTimeout(launchConfetti,200);
-                var all=document.createElement('div');all.className='all-popped';
-                all.textContent='You found all the love! 🎉';
-                arena.appendChild(all);
-              }
-            },420);
-          });
-        })(i,wrap);
-        arena.appendChild(wrap);
-      }
+// ===== FLIP CARDS =====
+function flipCard(card) { card.classList.toggle('flipped'); }
+
+// ===== FLOWER PICKING =====
+function pickFlower(el, wish) {
+  const reveal = document.getElementById('wishReveal');
+  reveal.textContent = wish;
+  reveal.classList.remove('hidden');
+  el.style.opacity = '0.5';
+  el.style.transform = 'scale(0.9)';
+  el.onclick = null;
+  launchMiniConfetti();
+}
+
+// ===== GIFT BOX =====
+function blowGiftCandle() {
+  const flame = document.getElementById('flameGroup');
+  const smoke = document.getElementById('smokeGroup');
+  const btn = document.getElementById('blowCandleBtn');
+  flame.style.transition = 'opacity 0.4s ease';
+  flame.style.opacity = '0';
+  smoke.style.opacity = '1';
+  btn.textContent = '🎉 Wish made!';
+  btn.disabled = true;
+  btn.style.opacity = '0.7';
+  launchMiniConfetti();
+  setTimeout(() => {
+    document.getElementById('giftStep1').classList.add('hidden');
+    document.getElementById('giftStep2').classList.remove('hidden');
+  }, 1200);
+}
+
+function openGiftBox() {
+  const closed = document.getElementById('giftClosed');
+  const opened = document.getElementById('giftOpened');
+  if (opened.classList.contains('hidden')) {
+    closed.style.transform = 'scale(1.1)';
+    setTimeout(() => {
+      closed.classList.add('hidden');
+      opened.classList.remove('hidden');
+      launchConfetti();
+    }, 300);
+  }
+}
+
+// ===== COUPON =====
+function applyCoupon() {
+  const code = document.getElementById('couponInput').value.trim().toUpperCase();
+  const msgEl = document.getElementById('couponMsg');
+  const discountRow = document.getElementById('discountRow');
+  if (COUPONS[code]) {
+    const discount = COUPONS[code];
+    state.discount = discount;
+    state.finalPrice = Math.max(0, state.basePrice - discount);
+    document.getElementById('discountAmount').textContent = `-₹${discount}`;
+    document.getElementById('totalAmount').textContent = state.finalPrice === 0 ? '🎉 FREE' : `₹${state.finalPrice}`;
+    discountRow.classList.remove('hidden');
+    // Update pay button label
+    const payBtn = document.querySelector('#page-checkout .btn-pink.w-full');
+    if (payBtn) {
+      if (state.finalPrice === 0) payBtn.textContent = '🎉 Unlock for FREE!';
+      else if (state.finalPrice === 1) payBtn.textContent = '⚡ Pay just ₹1!';
+      else payBtn.textContent = '🎀 Pay with Razorpay';
     }
-  }
-  renderBalloons();
-
-  // Wishes on scroll
-  var wishSec=container.querySelector('#wish-sec');
-  if(wishSec&&window.IntersectionObserver){
-    var obs=new IntersectionObserver(function(entries){
-      if(entries[0].isIntersecting){
-        [0,1,2].forEach(function(i){
-          var c=container.querySelector('#wc'+i);if(c)c.classList.add('revealed');
-        });
-      }
-    },{threshold:.25});
-    obs.observe(wishSec);
-  }
-
-  // Music fab
-  if(!inPreview){
-    var fab=container.querySelector('#mfab');
-    if(fab){fab.addEventListener('click',function(){fab.textContent=fab.textContent==='🎵'?'🔇':'🎵';});}
-  }
-}
-
-// ── MAIN APP ──
-var state={
-  page:'landing',step:0,
-  data:{recipientName:'',senderName:'',birthday:'',email:'',message:'',
-        wish1:'',wish2:'',wish3:'',balloon1:'',balloon2:'',balloon3:'',balloon4:'',
-        theme:'rose',music:'piano'},
-  siteId:'',coupon:'',couponApplied:null,payProcessing:false
-};
-
-var root=document.getElementById('root');
-document.body.appendChild(makeHeartsBackground());
-
-function setState(updates){Object.assign(state,updates);render();}
-// setData only mutates — does NOT call render() so typing never destroys the focused input
-function setData(k,v){state.data[k]=v;}
-
-function render(){
-  root.innerHTML='';
-  if(state.page==='landing')root.appendChild(renderLanding());
-  else if(state.page==='builder')root.appendChild(renderBuilder());
-  else if(state.page==='preview')root.appendChild(renderPreview());
-  else if(state.page==='payment')root.appendChild(renderPayment());
-  else if(state.page==='success')root.appendChild(renderSuccess());
-  else if(state.page==='recipient')root.appendChild(renderRecipient());
-}
-
-function renderLanding(){
-  var d=document.createElement('div');d.className='landing';
-  d.innerHTML='<div class="landing-pill">💌 Premium Birthday Surprise</div>'
-    +'<h1 class="landing-title">Create a <em>magical</em><br/>birthday surprise</h1>'
-    +'<p class="landing-sub">A beautiful animated website delivered as a link — they\'ll open it and feel completely loved. 💕</p>'
-    +'<button class="btn-primary" id="start-btn">✨ Start Creating</button>'
-    +'<div class="features-strip">'
-    +[['🎵','Music'],['💌','Letter'],['🎂','Blow candle'],['🎈','Pop balloons'],['🌸','Wishes'],['🎉','Confetti'],['🔗','Shareable link'],['📸','GIFs included']].map(function(x){return '<div class="feat-chip"><span>'+x[0]+'</span>'+x[1]+'</div>';}).join('')
-    +'</div>'
-    +'<div class="price-card"><div><span class="price-big">₹99</span> <span class="price-strike">₹299</span></div>'
-    +'<div class="price-sub">One-time · Lifetime link · No subscription</div>'
-    +'<div class="price-green">✓ Razorpay · Coupon codes: FREELOVE / LOVE1 / LOVE59</div></div>'
-    +'<div style="margin-top:20px;font-size:13px;color:var(--text-soft)">Preview the full experience before paying ✨</div>';
-  d.querySelector('#start-btn').addEventListener('click',function(){setState({page:'builder',step:0});});
-  return d;
-}
-
-function renderBuilder(){
-  var wrap=document.createElement('div');
-  wrap.style='position:relative;z-index:1;min-height:100vh;background:var(--cream)';
-  var header=document.createElement('div');header.className='builder-header';
-  header.innerHTML='<div class="builder-logo">BirthdayLove 💕</div>'
-    +'<div class="step-dots">'+[0,1,2,3].map(function(i){return '<div class="step-dot'+(state.step===i?' active':'')+'"></div>';}).join('')+'</div>';
-  wrap.appendChild(header);
-  var body=document.createElement('div');body.className='builder-body';
-  renderStep(state.step,body);
-  wrap.appendChild(body);
-  return wrap;
-}
-
-function mkField(body,label,key,type,placeholder,rows){
-  var d=state.data;
-  var div=document.createElement('div');div.className='field';
-  if(rows){
-    div.innerHTML='<label>'+label+'</label><textarea rows="'+rows+'" placeholder="'+placeholder+'">'+((d[key]||''))+'</textarea>';
-    div.querySelector('textarea').addEventListener('input',function(e){setData(key,e.target.value);});
+    msgEl.textContent = `🎉 Code "${code}" applied! You saved ₹${discount}` + (state.finalPrice === 0 ? ' — It\'s FREE! 🥳' : state.finalPrice === 1 ? ' — Just ₹1! 🤩' : '');
+    msgEl.className = 'text-xs mt-2 text-green-600 font-semibold';
+    msgEl.classList.remove('hidden');
   } else {
-    div.innerHTML='<label>'+label+'</label><input type="'+(type||'text')+'" placeholder="'+placeholder+'" value="'+(d[key]||'')+'">';
-    div.querySelector('input').addEventListener('input',function(e){setData(key,e.target.value);});
-  }
-  body.appendChild(div);
-}
-
-function renderStep(step,body){
-  var d=state.data;
-  if(step===0){
-    body.innerHTML='<div class="step-label">Step 1 of 4</div><h2 class="step-heading">Who\'s the birthday star? 🌟</h2><p class="step-sub">Tell us about them so we can make this extra special.</p>';
-    mkField(body,'Their name','recipientName','text','e.g. Priya, Sofia, Mahii…');
-    mkField(body,'Your name (the sender)','senderName','text','e.g. Your Aarav, Love Rohan…');
-    mkField(body,'Their birthday','birthday','date','');
-    mkField(body,'Your email (to receive the link)','email','email','you@email.com');
-    var nav=document.createElement('div');nav.className='step-nav';
-    nav.innerHTML='<button class="btn-primary" id="nx">Next →</button>';
-    nav.querySelector('#nx').addEventListener('click',function(){setState({step:1});});
-    body.appendChild(nav);
-  }
-  else if(step===1){
-    body.innerHTML='<div class="step-label">Step 2 of 4</div><h2 class="step-heading">Write them a letter 💌</h2><p class="step-sub">Pour your heart out — this is their love letter from you.</p>';
-    mkField(body,'Your heartfelt message','message','text','Dearest '+d.recipientName+'…\n\nToday is all about you.',7);
-    var bg=document.createElement('div');bg.className='balloon-msg-group';
-    bg.innerHTML='<h4>🎈 Balloon messages — hidden until popped</h4>';
-    [['balloon1','💕 Balloon 1','Something sweet they\'ll discover…'],['balloon2','✨ Balloon 2','Another little love note…'],['balloon3','🌸 Balloon 3','One more special thought…'],['balloon4','🎀 Balloon 4','The last hidden treasure…']].forEach(function(x){
-      var div=document.createElement('div');div.className='field';
-      div.innerHTML='<label>'+x[1]+'</label><input type="text" placeholder="'+x[2]+'" value="'+(d[x[0]]||'')+'">';
-      div.querySelector('input').addEventListener('input',function(e){setData(x[0],e.target.value);});
-      bg.appendChild(div);
-    });
-    body.appendChild(bg);
-    var nav=document.createElement('div');nav.className='step-nav';
-    nav.innerHTML='<button class="btn-back" id="bk">←</button><button class="btn-primary" id="nx">Next →</button>';
-    nav.querySelector('#bk').addEventListener('click',function(){setState({step:0});});
-    nav.querySelector('#nx').addEventListener('click',function(){setState({step:2});});
-    body.appendChild(nav);
-  }
-  else if(step===2){
-    body.innerHTML='<div class="step-label">Step 3 of 4</div><h2 class="step-heading">Theme & music 🎵</h2><p class="step-sub">Set the mood for their surprise.</p>';
-    var tDiv=document.createElement('div');tDiv.className='field';
-    tDiv.innerHTML='<label>Choose a theme</label><div class="theme-grid">'
-      +[{k:'rose',i:'🌸',n:'Rose Garden',s:'Soft pinks & petals'},{k:'lavender',i:'💜',n:'Lavender Dream',s:'Dreamy purples'},{k:'gold',i:'✨',n:'Golden Hour',s:'Warm & luminous'},{k:'ocean',i:'🌊',n:'Ocean Breeze',s:'Calm & serene'}]
-      .map(function(t){return '<div class="theme-card'+(d.theme===t.k?' selected':'')+'" data-t="'+t.k+'"><div class="theme-icon">'+t.i+'</div><div class="theme-name">'+t.n+'</div><div class="theme-desc">'+t.s+'</div></div>';}).join('')+'</div>';
-    tDiv.querySelectorAll('[data-t]').forEach(function(el){
-      el.addEventListener('click',function(){
-        setData('theme',el.dataset.t);
-        tDiv.querySelectorAll('[data-t]').forEach(function(e){e.classList.remove('selected');});
-        el.classList.add('selected');
-      });
-    });
-    body.appendChild(tDiv);
-    var mDiv=document.createElement('div');mDiv.className='field';
-    mDiv.innerHTML='<label>Background music</label><div class="music-list">'
-      +[{k:'piano',i:'🎹',n:'Gentle Piano',g:'Soft & Romantic'},{k:'acoustic',i:'🎸',n:'Acoustic Love',g:'Warm & Cozy'},{k:'strings',i:'🎻',n:'Strings of Joy',g:'Elegant & Emotional'},{k:'lofi',i:'🎧',n:'Lo-fi Birthday',g:'Chill & Modern'}]
-      .map(function(m){return '<div class="music-item'+(d.music===m.k?' selected':'')+'" data-m="'+m.k+'"><span style="font-size:22px">'+m.i+'</span><div style="flex:1"><div style="font-size:14px;font-weight:500">'+m.n+'</div><div style="font-size:12px;color:var(--text-soft)">'+m.g+'</div></div><span class="music-check">&#10003;</span></div>';}).join('')+'</div>';
-    mDiv.querySelectorAll('[data-m]').forEach(function(el){
-      el.addEventListener('click',function(){
-        setData('music',el.dataset.m);
-        mDiv.querySelectorAll('[data-m]').forEach(function(e){e.classList.remove('selected');});
-        el.classList.add('selected');
-      });
-    });
-    body.appendChild(mDiv);
-    var nav=document.createElement('div');nav.className='step-nav';
-    nav.innerHTML='<button class="btn-back" id="bk">←</button><button class="btn-primary" id="nx">Next →</button>';
-    nav.querySelector('#bk').addEventListener('click',function(){setState({step:1});});
-    nav.querySelector('#nx').addEventListener('click',function(){setState({step:3});});
-    body.appendChild(nav);
-  }
-  else if(step===3){
-    body.innerHTML='<div class="step-label">Step 4 of 4</div><h2 class="step-heading">Birthday wishes 🌺</h2><p class="step-sub">Add 3 personal wishes — they\'ll bloom one by one like flowers.</p>';
-    mkField(body,'Wish 1 🌸','wish1','text','I wish you a year full of adventure…');
-    mkField(body,'Wish 2 🌺','wish2','text','I wish you laughter every single day…');
-    mkField(body,'Wish 3 🌷','wish3','text','I wish you know how deeply you are loved…');
-    var nav=document.createElement('div');nav.className='step-nav';
-    nav.innerHTML='<button class="btn-back" id="bk">←</button><button class="btn-primary" id="pv">Preview ✨</button>';
-    nav.querySelector('#bk').addEventListener('click',function(){setState({step:2});});
-    nav.querySelector('#pv').addEventListener('click',function(){setState({page:'preview'});});
-    body.appendChild(nav);
+    msgEl.textContent = '❌ Invalid code. Try: BDAY50, LOVE100, SWEET50';
+    msgEl.className = 'text-xs mt-2 text-red-500';
+    msgEl.classList.remove('hidden');
   }
 }
 
-function renderPreview(){
-  var wrap=document.createElement('div');
-  wrap.style='position:relative;z-index:1;background:var(--petal);min-height:100vh';
-  var toolbar=document.createElement('div');toolbar.className='preview-toolbar';
-  toolbar.innerHTML='<div class="preview-label"><span>👁</span> Preview <span class="preview-badge">RECIPIENT VIEW</span></div><button class="btn-secondary" id="edit-btn">Edit</button>';
-  toolbar.querySelector('#edit-btn').addEventListener('click',function(){setState({page:'builder'});});
-  wrap.appendChild(toolbar);
-  var phone=document.createElement('div');phone.className='preview-phone';
-  buildBirthdaySite(state.data,phone,true);
-  wrap.appendChild(phone);
-  var actions=document.createElement('div');actions.className='preview-actions';
-  actions.innerHTML='<div class="preview-note"><strong>This is exactly what '+(state.data.recipientName||'they')+' will see</strong> when they open your link — no payment page, no setup, just pure magic. ✨</div>'
-    +'<div class="price-badge"><div class="price-amount">₹99</div><div style="font-size:12px;color:var(--text-soft)">One-time payment</div><div class="price-inc">✓ Includes lifetime shareable link</div></div>'
-    +'<button class="btn-primary" id="unlock-btn" style="width:100%">Unlock & Get Link 🔗</button>'
-    +'<div style="text-align:center;margin-top:12px;font-size:12px;color:var(--text-soft)">Secured by Razorpay 🔒</div>';
-  actions.querySelector('#unlock-btn').addEventListener('click',function(){setState({page:'payment'});});
-  wrap.appendChild(actions);
-  return wrap;
-}
+// ===== PAYMENT =====
+function initiatePayment() {
+  const btn = event.target;
+  btn.textContent = '⏳ Opening Razorpay...';
+  btn.disabled = true;
 
-function renderPayment(){
-  var wrap=document.createElement('div');wrap.className='payment-wrap';
-  var body=document.createElement('div');body.className='payment-body';
-  var base=99,disc=state.couponApplied?state.couponApplied.discount:0,final=Math.max(0,base-disc);
-  var isFree=final===0;
+  // Free coupon — skip payment entirely
+  if (state.finalPrice === 0) {
+    setTimeout(() => { goToPage('page-success'); launchConfetti(); }, 600);
+    return;
+  }
 
-  body.innerHTML='<div class="payment-header"><div style="font-size:48px;margin-bottom:16px">🌸</div><h2>Almost there!</h2><p>One payment and your magical surprise is ready to share.</p></div>'
-    +'<div class="order-summary">'
-    +'<div class="order-row"><span class="order-label">Birthday Surprise Website</span><span>₹99</span></div>'
-    +'<div class="order-row"><span class="order-label">For</span><span>'+(state.data.recipientName||'Your person')+' 🌸</span></div>'
-    +'<div class="order-row"><span class="order-label">Music</span><span style="text-transform:capitalize">'+(state.data.music||'Gentle Piano')+'</span></div>'
-    +(state.couponApplied?'<div class="order-row"><span class="order-label">Coupon 🎉</span><span class="order-discount">−₹'+disc+' ('+state.couponApplied.label+')</span></div>':'')
-    +'<div class="order-row total"><span>Total</span><span>₹'+final+'</span></div>'
-    +'</div>'
-    +'<div class="field"><label>Have a coupon code?</label>'
-    +'<div class="coupon-row"><input type="text" id="cup-input" placeholder="e.g. FREELOVE, LOVE1, LOVE59" value="'+(state.coupon||'')+'"/><button class="coupon-apply-btn" id="cup-apply">Apply</button></div>'
-    +'<div id="cup-msg" class="coupon-msg" style="display:none"></div></div>'
-    +'<button class="pay-btn" id="pay-btn"'+(state.payProcessing?' disabled':'')+'>'+( state.payProcessing?'⏳ Processing…':(isFree?'🎉 Claim Free — Get My Link':'🔒 Pay ₹'+final+' with Razorpay'))+'</button>'
-    +'<div class="pay-secure">🔐 256-bit encrypted · Razorpay certified · Instant activation</div>'
-    +'<button class="btn-back" style="margin-top:20px;width:100%;text-align:center" id="bk-btn">← Back to preview</button>';
+  // ₹1 coupon — instant "payment" then proceed
+  if (state.finalPrice === 1) {
+    btn.textContent = '⚡ Processing ₹1...';
+    setTimeout(() => { goToPage('page-success'); launchConfetti(); }, 1000);
+    return;
+  }
 
-  var cupInput=body.querySelector('#cup-input');
-  cupInput.addEventListener('input',function(e){state.coupon=e.target.value;});
-  body.querySelector('#cup-apply').addEventListener('click',function(){
-    var code=(state.coupon||'').trim().toUpperCase();
-    var msg=body.querySelector('#cup-msg');
-    var payBtn=body.querySelector('#pay-btn');
-    if(COUPONS[code]){
-      state.couponApplied=COUPONS[code];
-      var disc2=state.couponApplied.discount, final2=Math.max(0,99-disc2), isFree2=final2===0;
-      msg.className='coupon-msg coupon-ok';msg.textContent='✓ '+COUPONS[code].label;msg.style.display='block';
-      payBtn.textContent=isFree2?'🎉 Claim Free — Get My Link':'🔒 Pay ₹'+final2+' with Razorpay';
-      // update pay click handler for new amount
-      payBtn.onclick=function(){if(isFree2){activateSite();}else{initiateRazorpay(final2);}};
-    } else {
-      state.couponApplied=null;
-      msg.className='coupon-msg coupon-err';msg.textContent='✗ Invalid code. Try FREELOVE, LOVE1 or LOVE59';msg.style.display='block';
-      payBtn.textContent='🔒 Pay ₹99 with Razorpay';
-      payBtn.onclick=function(){initiateRazorpay(99);};
+  const options = {
+    key: 'rzp_test_YourKeyHere', // Replace with your live Razorpay key
+    amount: state.finalPrice * 100,
+    currency: 'INR',
+    name: 'Birthday Surprise 🎂',
+    description: 'Birthday Website for ' + state.recipient,
+    theme: { color: '#E8477A' },
+    handler: function(response) {
+      // Payment success — build shareable link and show success page
+      goToPage('page-success');
+      launchConfetti();
+    },
+    modal: {
+      ondismiss: function() {
+        btn.textContent = '🎀 Pay with Razorpay';
+        btn.disabled = false;
+      }
     }
-  });
-  body.querySelector('#bk-btn').addEventListener('click',function(){setState({page:'preview'});});
-  body.querySelector('#pay-btn').addEventListener('click',function(){
-    if(isFree){activateSite();}else{initiateRazorpay(final);}
-  });
-  wrap.appendChild(body);return wrap;
-}
+  };
 
-function activateSite(){
-  setState({payProcessing:true});
-  setTimeout(function(){
-    var id=randId();launchConfetti();setState({siteId:id,page:'success',payProcessing:false});
-  },1000);
-}
-
-function initiateRazorpay(amount){
-  setState({payProcessing:true});
-  function openRzp(){
-    var options={
-      key:RAZORPAY_KEY,amount:amount*100,currency:'INR',
-      name:'BirthdayLove',
-      description:'Birthday Surprise for '+(state.data.recipientName||'your person'),
-      prefill:{email:state.data.email||'',name:state.data.senderName||''},
-      theme:{color:'#d4627e'},
-      handler:function(res){console.log('Payment OK',res.razorpay_payment_id);activateSite();},
-      modal:{ondismiss:function(){setState({payProcessing:false});}}
-    };
-    try{var rzp=new window.Razorpay(options);rzp.open();}
-    catch(e){console.warn('Razorpay unavailable — demo mode');setTimeout(activateSite,1200);}
+  if (typeof Razorpay !== 'undefined') {
+    const rzp = new Razorpay(options);
+    rzp.open();
+  } else {
+    // Demo mode (Razorpay not loaded / test environment)
+    setTimeout(() => {
+      goToPage('page-success');
+      launchConfetti();
+    }, 1200);
   }
-  if(window.Razorpay){openRzp();return;}
-  var s=document.createElement('script');s.src='https://checkout.razorpay.com/v1/checkout.js';
-  s.onload=openRzp;s.onerror=function(){setTimeout(activateSite,1200);};
-  document.head.appendChild(s);
 }
 
-function renderSuccess(){
-  var wrap=document.createElement('div');wrap.className='success-wrap';
-  var link='https://birthdaylove.app/'+state.siteId;
-  wrap.innerHTML='<div class="success-icon">🎉</div>'
-    +'<h1 class="success-title">Your surprise is ready!</h1>'
-    +'<p class="success-sub">Share this link with '+(state.data.recipientName||'them')+' and watch the magic happen. The link is active forever! 🌸</p>'
-    +'<div class="link-box" id="lnk">🔗 '+link+'</div>'
-    +'<div id="cp-ok" style="font-size:12px;color:#5aad5a;margin-bottom:8px;display:none">✓ Copied!</div>'
-    +'<button class="btn-primary" id="cp-btn">📋 Copy Link</button>'
-    +'<div class="share-row">'
-    +'<button class="share-btn" id="wa">💬 WhatsApp</button>'
-    +'<button class="share-btn" id="tg">✈️ Telegram</button>'
-    +'<button class="share-btn" id="em">📧 Email</button>'
-    +'</div>'
-    +'<div style="margin-top:28px;padding:16px 20px;background:white;border-radius:16px;border:1px solid var(--rose);max-width:360px;font-size:13px;color:var(--text-soft);line-height:1.7"><strong style="color:var(--text)">How it works:</strong><br/>When '+(state.data.recipientName||'they')+' opens your link, they see only the birthday experience — no payment page, pure magic. ✨</div>'
-    +'<button class="btn-secondary" style="margin-top:20px" id="pv-rec">👁 Preview recipient view</button>';
-  function copyIt(){
-    navigator.clipboard.writeText(link).then(function(){
-      wrap.querySelector('#cp-ok').style.display='block';
-      wrap.querySelector('#cp-btn').textContent='✓ Copied!';
-      setTimeout(function(){wrap.querySelector('#cp-ok').style.display='none';wrap.querySelector('#cp-btn').textContent='📋 Copy Link';},2500);
-    });
+// ===== SUCCESS PAGE =====
+// Builds a self-contained shareable URL with ALL state encoded in base64 hash.
+// The recipient opens the same HTML file — no backend needed.
+function showSuccessPage() {
+  const payload = {
+    r: state.recipient,
+    s: state.sender,
+    m: state.message
+  };
+  const encoded = encodeState(payload);
+
+  // Use hash-based routing so the link works even when opened as a local file
+  const base = window.location.href.split('#')[0].split('?')[0];
+  const shareLink = `${base}#gift=${encoded}`;
+
+  document.getElementById('shareableLink').textContent = shareLink;
+  document.getElementById('successRecipient').textContent = state.recipient;
+}
+
+// ===== COPY LINK =====
+function copyLink() {
+  const link = document.getElementById('shareableLink').textContent;
+  navigator.clipboard.writeText(link).then(() => {
+    document.getElementById('copiedMsg').classList.remove('hidden');
+    setTimeout(() => document.getElementById('copiedMsg').classList.add('hidden'), 3000);
+  }).catch(() => {
+    // Fallback for older browsers / file:// protocol
+    const ta = document.createElement('textarea');
+    ta.value = link;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    document.getElementById('copiedMsg').classList.remove('hidden');
+    setTimeout(() => document.getElementById('copiedMsg').classList.add('hidden'), 3000);
+  });
+}
+
+// ===== WHATSAPP SHARE =====
+function shareWhatsApp() {
+  const link = document.getElementById('shareableLink').textContent;
+  const msg = encodeURIComponent(`🎂 Happy Birthday ${state.recipient}! I made you something special 💕\n\n${link}`);
+  window.open(`https://wa.me/?text=${msg}`, '_blank');
+}
+
+// ===== MUSIC =====
+function toggleMusic() {
+  const btn = document.getElementById('musicBtn');
+  const audio = document.getElementById('bgMusic');
+  if (state.musicPlaying) {
+    audio.pause(); btn.textContent = '🔇'; state.musicPlaying = false;
+  } else {
+    audio.play().catch(() => {}); btn.textContent = '🎵'; state.musicPlaying = true;
   }
-  wrap.querySelector('#lnk').addEventListener('click',copyIt);
-  wrap.querySelector('#cp-btn').addEventListener('click',copyIt);
-  wrap.querySelector('#wa').addEventListener('click',function(){window.open('https://wa.me/?text='+encodeURIComponent('I made something magical for your birthday! 🎉 Open this: '+link));});
-  wrap.querySelector('#tg').addEventListener('click',function(){window.open('https://t.me/share/url?url='+encodeURIComponent(link)+'&text='+encodeURIComponent('I made something magical for your birthday! 🎉'));});
-  wrap.querySelector('#em').addEventListener('click',function(){window.open('mailto:?subject=Your Birthday Surprise!&body='+encodeURIComponent('I made something magical just for you 🎉 Open this: '+link));});
-  wrap.querySelector('#pv-rec').addEventListener('click',function(){setState({page:'recipient'});});
-  return wrap;
 }
 
-function renderRecipient(){
-  var wrap=document.createElement('div');
-  wrap.style='position:relative;z-index:1;max-width:480px;margin:0 auto;min-height:100vh;background:white;box-shadow:0 0 60px var(--shadow)';
-  buildBirthdaySite(state.data,wrap,false);
-  return wrap;
+// ===== CONFETTI =====
+function launchConfetti() {
+  const container = document.getElementById('confettiContainer');
+  const colors = ['#FF7BAC', '#FFD700', '#E8477A', '#FFB6D3', '#FF6B9D', '#FFF'];
+  for (let i = 0; i < 60; i++) {
+    setTimeout(() => {
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.left = Math.random() * 100 + 'vw';
+      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+      piece.style.width = (Math.random() * 8 + 6) + 'px';
+      piece.style.height = (Math.random() * 8 + 6) + 'px';
+      piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      piece.style.animationDuration = (Math.random() * 3 + 2) + 's';
+      piece.style.animationDelay = Math.random() * 0.5 + 's';
+      container.appendChild(piece);
+      setTimeout(() => piece.remove(), 5000);
+    }, i * 30);
+  }
 }
 
-render();
+function launchMiniConfetti() {
+  const container = document.getElementById('confettiContainer');
+  for (let i = 0; i < 20; i++) {
+    setTimeout(() => {
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.left = (30 + Math.random() * 40) + 'vw';
+      piece.style.background = ['#FF7BAC', '#FFD700', '#E8477A'][Math.floor(Math.random() * 3)];
+      piece.style.width = '8px'; piece.style.height = '8px';
+      piece.style.borderRadius = '50%';
+      piece.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
+      container.appendChild(piece);
+      setTimeout(() => piece.remove(), 3500);
+    }, i * 50);
+  }
+}
+
+// ===== URL ROUTING — THE MAGIC PIECE =====
+// When recipient opens the link (e.g. file.html#gift=BASE64DATA),
+// we decode the state from the hash and jump straight to the experience.
+function checkRoute() {
+  const hash = window.location.hash;
+
+  if (hash.startsWith('#gift=')) {
+    const encoded = hash.slice(6); // everything after "#gift="
+    const data = decodeState(encoded);
+
+    if (!data) {
+      // Bad/corrupt link — just show welcome
+      return;
+    }
+
+    // Populate state from the encoded payload
+    state.recipient = data.r || 'Beautiful';
+    state.sender    = data.s || 'Someone special';
+    state.message   = data.m || 'You are loved beyond words 💕';
+    state.isRecipientView = true;
+
+    // Populate all personalised content fields before showing pages
+    populateRecipientContent();
+
+    // Take recipient straight to the memory cards (page 1 of their journey)
+    // They get the full experience: storybook → letter → reasons → gift
+    // with NO welcome form, NO preview, NO checkout, NO success pages
+    goToPage('page-storybook');
+    launchConfetti();
+    return;
+  }
+}
+
+// Fills in all text fields with recipient's personalised content
+function populateRecipientContent() {
+  // Letter page
+  const sub = document.getElementById('letterSubtitle');
+  const msg = document.getElementById('customMsgDisplay');
+  const sen = document.getElementById('senderNameDisplay');
+  if (sub) sub.textContent = `For ${state.recipient} with love 💕`;
+  if (msg) msg.textContent = state.message;
+  if (sen) sen.textContent = `— ${state.sender} ❤️`;
+
+  // Reasons page
+  const rsub = document.getElementById('reasonsSubtitle');
+  if (rsub) rsub.textContent = `for ${state.recipient} ✨`;
+
+  // Gift page
+  const gname = document.getElementById('giftRecipientName');
+  const gcname = document.getElementById('giftCandleName');
+  if (gname) gname.textContent = state.recipient + '!';
+  if (gcname) gcname.textContent = state.recipient;
+}
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', () => {
+  // Add shake keyframe
+  const style = document.createElement('style');
+  style.textContent = '@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }';
+  document.head.appendChild(style);
+
+  // Check if this is a recipient link — this must run first
+  checkRoute();
+});
 </script>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js" async></script>
 </body>
 </html>
