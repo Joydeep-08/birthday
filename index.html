@@ -189,11 +189,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 <div id="root"></div>
 <script>
 // ── CONFIG ── Replace with your actual Razorpay key ──
-var RAZORPAY_KEY = 'rzp_live_SvD983baZpuP2A';
-
+var RAZORPAY_KEY = 'rzp_test_YOURKEYHERE';
 
 // GIF files — place gif1.gif, gif2.gif, gif3.gif, gif4.gif in same folder as index.html
-var GIF_FILES = ['gif1.gif','gif2.gif','gif3.gif','gif4.gif'];
+var GIF_FILES = ['gif1.webp','gif2.webp','gif3.webp','gif4.webp'];
 var GIF_FALLBACK_EMOJI = ['🌸','💫','🎉','💕'];
 
 var COUPONS = {
@@ -405,7 +404,8 @@ var root=document.getElementById('root');
 document.body.appendChild(makeHeartsBackground());
 
 function setState(updates){Object.assign(state,updates);render();}
-function setData(k,v){state.data=Object.assign({},state.data);state.data[k]=v;render();}
+// setData only mutates — does NOT call render() so typing never destroys the focused input
+function setData(k,v){state.data[k]=v;}
 
 function render(){
   root.innerHTML='';
@@ -497,13 +497,25 @@ function renderStep(step,body){
     tDiv.innerHTML='<label>Choose a theme</label><div class="theme-grid">'
       +[{k:'rose',i:'🌸',n:'Rose Garden',s:'Soft pinks & petals'},{k:'lavender',i:'💜',n:'Lavender Dream',s:'Dreamy purples'},{k:'gold',i:'✨',n:'Golden Hour',s:'Warm & luminous'},{k:'ocean',i:'🌊',n:'Ocean Breeze',s:'Calm & serene'}]
       .map(function(t){return '<div class="theme-card'+(d.theme===t.k?' selected':'')+'" data-t="'+t.k+'"><div class="theme-icon">'+t.i+'</div><div class="theme-name">'+t.n+'</div><div class="theme-desc">'+t.s+'</div></div>';}).join('')+'</div>';
-    tDiv.querySelectorAll('[data-t]').forEach(function(el){el.addEventListener('click',function(){setData('theme',el.dataset.t);});});
+    tDiv.querySelectorAll('[data-t]').forEach(function(el){
+      el.addEventListener('click',function(){
+        setData('theme',el.dataset.t);
+        tDiv.querySelectorAll('[data-t]').forEach(function(e){e.classList.remove('selected');});
+        el.classList.add('selected');
+      });
+    });
     body.appendChild(tDiv);
     var mDiv=document.createElement('div');mDiv.className='field';
     mDiv.innerHTML='<label>Background music</label><div class="music-list">'
       +[{k:'piano',i:'🎹',n:'Gentle Piano',g:'Soft & Romantic'},{k:'acoustic',i:'🎸',n:'Acoustic Love',g:'Warm & Cozy'},{k:'strings',i:'🎻',n:'Strings of Joy',g:'Elegant & Emotional'},{k:'lofi',i:'🎧',n:'Lo-fi Birthday',g:'Chill & Modern'}]
-      .map(function(m){return '<div class="music-item'+(d.music===m.k?' selected':'')+'" data-m="'+m.k+'"><span style="font-size:22px">'+m.i+'</span><div style="flex:1"><div style="font-size:14px;font-weight:500">'+m.n+'</div><div style="font-size:12px;color:var(--text-soft)">'+m.g+'</div></div><span class="music-check">✓</span></div>';}).join('')+'</div>';
-    mDiv.querySelectorAll('[data-m]').forEach(function(el){el.addEventListener('click',function(){setData('music',el.dataset.m);});});
+      .map(function(m){return '<div class="music-item'+(d.music===m.k?' selected':'')+'" data-m="'+m.k+'"><span style="font-size:22px">'+m.i+'</span><div style="flex:1"><div style="font-size:14px;font-weight:500">'+m.n+'</div><div style="font-size:12px;color:var(--text-soft)">'+m.g+'</div></div><span class="music-check">&#10003;</span></div>';}).join('')+'</div>';
+    mDiv.querySelectorAll('[data-m]').forEach(function(el){
+      el.addEventListener('click',function(){
+        setData('music',el.dataset.m);
+        mDiv.querySelectorAll('[data-m]').forEach(function(e){e.classList.remove('selected');});
+        el.classList.add('selected');
+      });
+    });
     body.appendChild(mDiv);
     var nav=document.createElement('div');nav.className='step-nav';
     nav.innerHTML='<button class="btn-back" id="bk">←</button><button class="btn-primary" id="nx">Next →</button>';
@@ -570,14 +582,19 @@ function renderPayment(){
   body.querySelector('#cup-apply').addEventListener('click',function(){
     var code=(state.coupon||'').trim().toUpperCase();
     var msg=body.querySelector('#cup-msg');
+    var payBtn=body.querySelector('#pay-btn');
     if(COUPONS[code]){
       state.couponApplied=COUPONS[code];
+      var disc2=state.couponApplied.discount, final2=Math.max(0,99-disc2), isFree2=final2===0;
       msg.className='coupon-msg coupon-ok';msg.textContent='✓ '+COUPONS[code].label;msg.style.display='block';
-      setState({});
+      payBtn.textContent=isFree2?'🎉 Claim Free — Get My Link':'🔒 Pay ₹'+final2+' with Razorpay';
+      // update pay click handler for new amount
+      payBtn.onclick=function(){if(isFree2){activateSite();}else{initiateRazorpay(final2);}};
     } else {
       state.couponApplied=null;
-      msg.className='coupon-msg coupon-err';msg.textContent='✗ Invalid coupon code. Try FREELOVE, LOVE1 or LOVE59';msg.style.display='block';
-      setState({});
+      msg.className='coupon-msg coupon-err';msg.textContent='✗ Invalid code. Try FREELOVE, LOVE1 or LOVE59';msg.style.display='block';
+      payBtn.textContent='🔒 Pay ₹99 with Razorpay';
+      payBtn.onclick=function(){initiateRazorpay(99);};
     }
   });
   body.querySelector('#bk-btn').addEventListener('click',function(){setState({page:'preview'});});
