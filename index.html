@@ -3,11 +3,9 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<meta http-equiv="Permissions-Policy" content="accelerometer=*, gyroscope=*"/>
 <title>Birthday Surprise 🎂</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Nunito:wght@300;400;500;600;700&family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"/>
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <style>
   :root {
     --pink-soft: #FFE4EF; --pink-mid: #FFB6D3; --pink-deep: #FF7BAC;
@@ -31,7 +29,6 @@
   .btn-pink { background: linear-gradient(135deg, var(--pink-deep), var(--pink-accent)); color: white; font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 1.1rem; padding: 16px 40px; border-radius: 50px; border: none; cursor: pointer; box-shadow: 0 8px 24px rgba(232,71,122,0.35); transition: all 0.3s ease; letter-spacing: 0.5px; }
   .btn-pink:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(232,71,122,0.45); }
   .btn-pink:active { transform: translateY(0); }
-  .btn-pink:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
   .btn-outline { background: transparent; color: var(--pink-accent); font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 1rem; padding: 14px 36px; border-radius: 50px; border: 2px solid var(--pink-deep); cursor: pointer; transition: all 0.3s ease; }
   .btn-outline:hover { background: var(--pink-soft); transform: translateY(-2px); }
   .input-cute { width: 100%; padding: 14px 20px; border-radius: 16px; border: 2px solid var(--pink-mid); background: white; font-family: 'Nunito', sans-serif; font-size: 1rem; color: var(--text-dark); outline: none; transition: border-color 0.3s ease, box-shadow 0.3s ease; }
@@ -59,55 +56,16 @@
   .sticker { display: inline-block; animation: wiggle 3s ease-in-out infinite; }
   @keyframes wiggle { 0%, 90%, 100% { transform: rotate(0deg); } 92% { transform: rotate(-5deg); } 96% { transform: rotate(5deg); } }
   .tape { display: inline-block; background: rgba(255,182,211,0.5); padding: 3px 24px; transform: rotate(-2deg); font-size: 0.7rem; color: var(--text-mid); letter-spacing: 2px; text-transform: uppercase; }
-  .preview-banner { background: linear-gradient(135deg, #FF7BAC, #E8477A); color: white; text-align: center; padding: 10px; font-weight: 700; font-size: 0.9rem; letter-spacing: 1px; position: sticky; top: 0; z-index: 100; }
   .link-box { background: var(--pink-soft); border: 2px dashed var(--pink-mid); border-radius: 16px; padding: 16px 20px; font-family: 'Courier New', monospace; font-size: 0.75rem; color: var(--text-mid); word-break: break-all; text-align: center; }
   .shine-effect { position: relative; overflow: hidden; }
   .shine-effect::after { content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); animation: shine 3s infinite; }
   @keyframes shine { 0% { left: -100%; } 100% { left: 200%; } }
-  .coupon-input { background: var(--pink-soft); border: 2px dashed var(--pink-mid); padding: 10px 16px; border-radius: 12px; font-family: 'Nunito', sans-serif; font-size: 1rem; outline: none; width: 100%; color: var(--text-dark); transition: border-color 0.3s; }
-  .coupon-input:focus { border-color: var(--pink-deep); }
-  .ribbon { position: absolute; top: -10px; right: 20px; background: linear-gradient(135deg, var(--pink-deep), var(--pink-accent)); color: white; font-size: 0.75rem; font-weight: 700; padding: 6px 14px; border-radius: 4px; }
-  .ribbon::after { content: ''; position: absolute; bottom: -8px; right: 0; width: 0; height: 0; border-left: 8px solid transparent; border-top: 8px solid var(--pink-accent); }
   .illustration { filter: drop-shadow(0 8px 16px rgba(232,71,122,0.2)); }
   .emoji-bounce { animation: emojiBounce 2s ease-in-out infinite; }
   @keyframes emojiBounce { 0%, 100% { transform: translateY(0) rotate(0); } 25% { transform: translateY(-8px) rotate(-5deg); } 75% { transform: translateY(-4px) rotate(5deg); } }
-  .secure-badge { display: inline-flex; align-items: center; gap: 6px; background: #E8F5E9; color: #2E7D32; border-radius: 20px; padding: 4px 12px; font-size: 0.75rem; font-weight: 700; }
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: var(--pink-soft); }
   ::-webkit-scrollbar-thumb { background: var(--pink-mid); border-radius: 3px; }
-
-  /* Payment panel — same style as lovepage */
-  #panelOverlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:190; }
-  #payPanel {
-    display:none; background:#fff; border-radius:20px; padding:1.4rem 1.4rem 1.2rem;
-    position:fixed; bottom:max(1.2rem,env(safe-area-inset-bottom)); left:50%;
-    transform:translateX(-50%); width:calc(100% - 2.4rem); max-width:400px; z-index:200;
-    box-shadow:0 8px 40px rgba(232,71,122,.3); animation:slideUp .25s ease;
-  }
-  @keyframes slideUp { from{transform:translateX(-50%) translateY(20px);opacity:0;} to{transform:translateX(-50%) translateY(0);opacity:1;} }
-  .panel-title { font-weight:700; color:var(--text-dark); font-size:1rem; margin-bottom:1rem; text-align:center; padding-right:1.5rem; font-family:'Nunito',sans-serif; }
-  .panel-close { position:absolute; top:.9rem; right:1rem; background:none; border:none; font-size:1.1rem; cursor:pointer; color:var(--text-light); line-height:1; }
-  .pay-row { display:flex; gap:.5rem; align-items:center; margin-bottom:.4rem; }
-  .panel-coupon-input {
-    flex:1; padding:.65rem 1rem; border:1.5px solid var(--pink-mid); border-radius:12px;
-    font-family:'Nunito',sans-serif; font-size:.9rem; color:var(--text-dark);
-    background:#fffafb; outline:none; text-transform:uppercase;
-  }
-  .panel-coupon-input:focus { border-color:var(--pink-deep); }
-  .apply-btn {
-    padding:.65rem 1rem; background:var(--pink-accent); color:#fff; border:none; border-radius:12px;
-    font-weight:700; font-size:.85rem; cursor:pointer; white-space:nowrap; font-family:'Nunito',sans-serif;
-  }
-  .coupon-msg { font-size:.8rem; min-height:1em; margin-bottom:.4rem; }
-  .coupon-msg.ok { color:#1a8a4a; }
-  .coupon-msg.err { color:#c0392b; }
-  .panel-pay-btn {
-    width:100%; padding:.9rem; border:none; border-radius:14px;
-    background:linear-gradient(135deg, var(--pink-deep), var(--pink-accent)); color:#fff;
-    font-family:'Nunito',sans-serif; font-size:1rem; font-weight:700; cursor:pointer;
-    box-shadow:0 5px 16px rgba(232,71,122,.45); transition:opacity .2s;
-  }
-  .panel-pay-btn:disabled { opacity:.65; cursor:not-allowed; }
 </style>
 </head>
 <body>
@@ -377,58 +335,28 @@
           </div>
         </div>
         <div class="text-center mt-6" id="giftNextBtn">
-          <button class="btn-pink" onclick="goToPage('page-preview')">Preview Full Website 👀</button>
-          <p class="text-xs mt-2" style="color: var(--text-light);">See everything before sharing!</p>
+          <button class="btn-pink" onclick="goToPage('page-share')">Get Shareable Link 🔗</button>
+          <p class="text-xs mt-2" style="color: var(--text-light);">Share your birthday surprise — completely free! 💕</p>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- PAGE 6: PREVIEW -->
-<div id="page-preview" class="page">
-  <div class="min-h-screen" style="background: var(--blush);">
-    <div class="preview-banner">🎉 FULL PREVIEW — Everything looks perfect? Unlock & Share! 🎉</div>
-    <div class="max-w-lg mx-auto px-4 py-6">
-      <div class="text-center mb-6">
-        <div class="text-4xl mb-2">👀</div>
-        <h2 class="font-playfair text-2xl font-bold" style="color: var(--text-dark);">Your Birthday Website</h2>
-        <p class="text-sm mt-1" style="color: var(--text-light);">Here's what <span id="previewRecipient" class="font-semibold" style="color: var(--pink-accent);">your person</span> will see 💕</p>
-      </div>
-      <div class="space-y-3 mb-6">
-        <div class="card-cute p-4"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full flex items-center justify-center text-xl" style="background: var(--pink-soft);">🎂</div><div><p class="font-semibold text-sm">Welcome Page</p><p class="text-xs" style="color: var(--text-light);">Personalised birthday greeting</p></div><span class="ml-auto text-green-500 text-lg">✅</span></div></div>
-        <div class="card-cute p-4"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full flex items-center justify-center text-xl" style="background: var(--pink-soft);">🧸</div><div><p class="font-semibold text-sm">Memory Cards</p><p class="text-xs" style="color: var(--text-light);">4 interactive flip cards</p></div><span class="ml-auto text-green-500 text-lg">✅</span></div></div>
-        <div class="card-cute p-4"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full flex items-center justify-center text-xl" style="background: var(--pink-soft);">💌</div><div><p class="font-semibold text-sm">Birthday Letter</p><p class="text-xs" style="color: var(--text-light);">Personalised love letter</p></div><span class="ml-auto text-green-500 text-lg">✅</span></div></div>
-        <div class="card-cute p-4"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full flex items-center justify-center text-xl" style="background: var(--pink-soft);">💝</div><div><p class="font-semibold text-sm">Appreciation + Wishes</p><p class="text-xs" style="color: var(--text-light);">6 reasons + 3 flower wishes</p></div><span class="ml-auto text-green-500 text-lg">✅</span></div></div>
-        <div class="card-cute p-4"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full flex items-center justify-center text-xl" style="background: var(--pink-soft);">🎁</div><div><p class="font-semibold text-sm">Animated Gift Box</p><p class="text-xs" style="color: var(--text-light);">Interactive surprise reveal</p></div><span class="ml-auto text-green-500 text-lg">✅</span></div></div>
-      </div>
-      <div class="card-cute p-5 mb-6">
-        <div class="flex justify-between text-sm mb-2"><span style="color: var(--text-light);">From:</span><span class="font-semibold" id="summarySender">—</span></div>
-        <div class="flex justify-between text-sm"><span style="color: var(--text-light);">For:</span><span class="font-semibold" style="color: var(--pink-accent);" id="summaryRecipient">—</span></div>
-      </div>
-      <div class="text-center">
-        <button class="btn-pink w-full shine-effect" onclick="openPayPanel()">🔓 Unlock & Share — ₹179 only!</button>
-        <p class="text-xs mt-2" style="color: var(--text-light);">One-time · Lifetime access link 💕</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- PAGE 7: SUCCESS -->
-<div id="page-success" class="page">
+<!-- PAGE 6: SHARE -->
+<div id="page-share" class="page">
   <div class="min-h-screen" style="background: linear-gradient(135deg, var(--pink-soft) 0%, white 50%, var(--lavender) 100%);">
     <div class="max-w-lg mx-auto px-4 py-8">
       <div class="text-center mb-6">
         <div class="text-5xl mb-3 float-anim">🎉</div>
-        <h2 class="font-playfair text-3xl font-bold" style="color: var(--text-dark);">Payment Successful!</h2>
-        <p class="font-dancing text-xl mt-1" style="color: var(--pink-accent);">Your birthday surprise is ready! 🎀</p>
-        <div class="mt-3"><span class="secure-badge">✅ Payment Verified</span></div>
+        <h2 class="font-playfair text-3xl font-bold" style="color: var(--text-dark);">Your Birthday Surprise</h2>
+        <p class="font-dancing text-xl mt-1" style="color: var(--pink-accent);">is ready to share! 🎀</p>
       </div>
       <div class="card-cute p-6 mb-6">
         <div class="text-center mb-4">
           <div class="text-3xl mb-2">🔗</div>
           <p class="font-semibold" style="color: var(--text-dark);">Your Shareable Link</p>
-          <p class="text-xs mt-1" style="color: var(--text-light);">Share with <span id="successRecipient" class="font-semibold" style="color: var(--pink-accent);">them</span>! ✨</p>
+          <p class="text-xs mt-1" style="color: var(--text-light);">Share with <span id="shareRecipient" class="font-semibold" style="color: var(--pink-accent);">them</span>! ✨</p>
         </div>
         <div class="link-box mb-4" id="shareableLink">generating...</div>
         <div class="flex gap-3">
@@ -436,6 +364,10 @@
           <button class="btn-outline flex-1" onclick="shareWhatsApp()">💬 WhatsApp</button>
         </div>
         <p id="copiedMsg" class="text-center text-xs mt-2 text-green-600 hidden font-semibold">✅ Copied!</p>
+      </div>
+      <div class="card-cute p-5 mb-6">
+        <div class="flex justify-between text-sm mb-2"><span style="color: var(--text-light);">From:</span><span class="font-semibold" id="shareSender">—</span></div>
+        <div class="flex justify-between text-sm"><span style="color: var(--text-light);">For:</span><span class="font-semibold" style="color: var(--pink-accent);" id="shareFor">—</span></div>
       </div>
       <div class="text-center">
         <div class="flex justify-center gap-4 text-3xl mb-4">
@@ -447,43 +379,12 @@
   </div>
 </div>
 
-<!-- PAYMENT PANEL (same pattern as lovepage) -->
-<div id="panelOverlay"></div>
-<div id="payPanel">
-  <button class="panel-close" id="panelCloseBtn">✕</button>
-  <p class="panel-title">🎀 Unlock & Share — ₹179</p>
-  <div class="pay-row">
-    <input type="text" class="panel-coupon-input" id="couponInput" placeholder="Coupon code (optional)" autocapitalize="characters" autocomplete="off" spellcheck="false"/>
-    <button class="apply-btn" onclick="applyCoupon()">Apply</button>
-  </div>
-  <p class="coupon-msg" id="couponMsg"></p>
-  <button class="panel-pay-btn" id="payBtn">Pay ₹179 & Get Link 💕</button>
-</div>
-
 <script>
-// ================================================================
-//  STATE
-// ================================================================
 const state = {
   sender: '', recipient: '', message: '',
-  musicPlaying: false, isRecipientView: false,
-  discount: 0, basePrice: 179, finalPrice: 179,
-  paymentId: null
+  musicPlaying: false, isRecipientView: false
 };
 
-const RAZORPAY_KEY = 'rzp_live_SvD983baZpuP2A';
-
-const COUPONS = {
-  'BDAY50':   50,
-  'LOVE100':  100,
-  'SWEET30':  30,
-  'BDAY2024': 178,
-  'FREEBDAY': 179
-};
-
-// ================================================================
-//  PAGE NAVIGATION
-// ================================================================
 function goToPage(pageId) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById(pageId).classList.add('active');
@@ -491,13 +392,9 @@ function goToPage(pageId) {
   if (pageId === 'page-letter')  updateLetterPage();
   if (pageId === 'page-reasons') updateReasonsPage();
   if (pageId === 'page-gift')    updateGiftPage();
-  if (pageId === 'page-preview') updatePreviewPage();
-  if (pageId === 'page-success') showSuccessPage();
+  if (pageId === 'page-share')   updateSharePage();
 }
 
-// ================================================================
-//  START JOURNEY
-// ================================================================
 function startJourney() {
   const sender    = document.getElementById('senderName').value.trim();
   const recipient = document.getElementById('recipientName').value.trim();
@@ -510,16 +407,13 @@ function startJourney() {
   setTimeout(() => goToPage('page-storybook'), 300);
 }
 
-// ================================================================
-//  PAGE UPDATERS
-// ================================================================
 function updateLetterPage() {
-  document.getElementById('letterSubtitle').textContent   = `For ${state.recipient} with love 💕`;
+  document.getElementById('letterSubtitle').textContent   = 'For ' + state.recipient + ' with love 💕';
   document.getElementById('customMsgDisplay').textContent  = state.message;
-  document.getElementById('senderNameDisplay').textContent = `— ${state.sender} ❤️`;
+  document.getElementById('senderNameDisplay').textContent = '— ' + state.sender + ' ❤️';
 }
 function updateReasonsPage() {
-  document.getElementById('reasonsSubtitle').textContent = `for ${state.recipient} ✨`;
+  document.getElementById('reasonsSubtitle').textContent = 'for ' + state.recipient + ' ✨';
 }
 function updateGiftPage() {
   document.getElementById('giftRecipientName').textContent = state.recipient + '!';
@@ -528,30 +422,34 @@ function updateGiftPage() {
   document.getElementById('giftStep2').classList.add('hidden');
   document.getElementById('giftClosed').classList.remove('hidden');
   document.getElementById('giftOpened').classList.add('hidden');
-  const flame = document.getElementById('flameGroup');
-  const smoke = document.getElementById('smokeGroup');
+  var flame = document.getElementById('flameGroup');
+  var smoke = document.getElementById('smokeGroup');
   if (flame) { flame.style.transition = ''; flame.style.opacity = '1'; }
   if (smoke) smoke.style.opacity = '0';
-  const blowBtn = document.getElementById('blowCandleBtn');
+  var blowBtn = document.getElementById('blowCandleBtn');
   if (blowBtn) { blowBtn.textContent = '🌬️ Tap to blow the candle'; blowBtn.disabled = false; blowBtn.style.opacity = '1'; }
-  const nextBtn = document.getElementById('giftNextBtn');
+  var nextBtn = document.getElementById('giftNextBtn');
   if (nextBtn) {
     if (state.isRecipientView) {
-      nextBtn.innerHTML = `<div class="card-cute p-4 mt-4 text-center" style="background: linear-gradient(135deg, white, var(--pink-soft));"><p class="font-dancing text-2xl" style="color: var(--pink-accent);">Made with 💕 just for you</p><p class="text-sm mt-2" style="color: var(--text-mid);">From <strong>${state.sender}</strong>, with all my love 🌸</p></div>`;
+      nextBtn.innerHTML = '<div class="card-cute p-4 mt-4 text-center" style="background: linear-gradient(135deg, white, var(--pink-soft));"><p class="font-dancing text-2xl" style="color: var(--pink-accent);">Made with 💕 just for you</p><p class="text-sm mt-2" style="color: var(--text-mid);">From <strong>' + state.sender + '</strong>, with all my love 🌸</p></div>';
     } else {
-      nextBtn.innerHTML = `<button class="btn-pink" onclick="goToPage('page-preview')">Preview Full Website 👀</button><p class="text-xs mt-2" style="color: var(--text-light);">See everything before sharing!</p>`;
+      nextBtn.innerHTML = '<button class="btn-pink" onclick="goToPage(\'page-share\')">Get Shareable Link 🔗</button><p class="text-xs mt-2" style="color: var(--text-light);">Share your birthday surprise — completely free! 💕</p>';
     }
   }
 }
-function updatePreviewPage() {
-  document.getElementById('previewRecipient').textContent = state.recipient;
-  document.getElementById('summarySender').textContent    = state.sender;
-  document.getElementById('summaryRecipient').textContent = state.recipient;
+
+function updateSharePage() {
+  var payload   = { r: state.recipient, s: state.sender, m: state.message };
+  var encoded   = encodeState(payload);
+  var base      = window.location.href.split('#')[0].split('?')[0];
+  var shareLink = base + '#gift=' + encoded;
+  document.getElementById('shareableLink').textContent = shareLink;
+  document.getElementById('shareRecipient').textContent = state.recipient;
+  document.getElementById('shareSender').textContent    = state.sender;
+  document.getElementById('shareFor').textContent       = state.recipient;
+  launchConfetti();
 }
 
-// ================================================================
-//  FLIP CARDS & FLOWERS
-// ================================================================
 function flipCard(card) { card.classList.toggle('flipped'); }
 
 function pickFlower(el, wish) {
@@ -563,13 +461,10 @@ function pickFlower(el, wish) {
   launchMiniConfetti();
 }
 
-// ================================================================
-//  GIFT BOX
-// ================================================================
 function blowGiftCandle() {
-  const flame = document.getElementById('flameGroup');
-  const smoke = document.getElementById('smokeGroup');
-  const btn   = document.getElementById('blowCandleBtn');
+  var flame = document.getElementById('flameGroup');
+  var smoke = document.getElementById('smokeGroup');
+  var btn   = document.getElementById('blowCandleBtn');
   flame.style.transition = 'opacity 0.4s ease';
   flame.style.opacity    = '0';
   smoke.style.opacity    = '1';
@@ -577,136 +472,21 @@ function blowGiftCandle() {
   btn.disabled           = true;
   btn.style.opacity      = '0.7';
   launchMiniConfetti();
-  setTimeout(() => {
+  setTimeout(function() {
     document.getElementById('giftStep1').classList.add('hidden');
     document.getElementById('giftStep2').classList.remove('hidden');
   }, 1200);
 }
 
 function openGiftBox() {
-  const closed = document.getElementById('giftClosed');
-  const opened = document.getElementById('giftOpened');
+  var closed = document.getElementById('giftClosed');
+  var opened = document.getElementById('giftOpened');
   if (opened.classList.contains('hidden')) {
     closed.style.transform = 'scale(1.1)';
-    setTimeout(() => { closed.classList.add('hidden'); opened.classList.remove('hidden'); launchConfetti(); }, 300);
+    setTimeout(function() { closed.classList.add('hidden'); opened.classList.remove('hidden'); launchConfetti(); }, 300);
   }
 }
 
-// ================================================================
-//  PAYMENT PANEL
-// ================================================================
-function openPayPanel() {
-  document.getElementById('panelOverlay').style.display = 'block';
-  document.getElementById('payPanel').style.display     = 'block';
-}
-function closePayPanel() {
-  document.getElementById('panelOverlay').style.display = 'none';
-  document.getElementById('payPanel').style.display     = 'none';
-}
-document.getElementById('panelOverlay').addEventListener('click', closePayPanel);
-document.getElementById('panelCloseBtn').addEventListener('click', closePayPanel);
-
-// ================================================================
-//  COUPON
-// ================================================================
-function applyCoupon() {
-  const code    = document.getElementById('couponInput').value.trim().toUpperCase();
-  const msgEl   = document.getElementById('couponMsg');
-  const payBtn  = document.getElementById('payBtn');
-
-  if (COUPONS[code] !== undefined) {
-    state.discount   = COUPONS[code];
-    state.finalPrice = Math.max(0, state.basePrice - state.discount);
-    msgEl.textContent = `✓ Applied — saved ₹${state.discount}${state.finalPrice === 0 ? ' (FREE! 🥳)' : ''}`;
-    msgEl.className   = 'coupon-msg ok';
-    payBtn.textContent = state.finalPrice === 0 ? 'Get Free Link 🎉' : `Pay ₹${state.finalPrice} & Get Link 💕`;
-  } else if (code === '') {
-    state.discount = 0; state.finalPrice = state.basePrice;
-    msgEl.textContent = ''; msgEl.className = 'coupon-msg';
-    payBtn.textContent = 'Pay ₹179 & Get Link 💕';
-  } else {
-    state.discount = 0; state.finalPrice = state.basePrice;
-    msgEl.textContent = '✗ Invalid code'; msgEl.className = 'coupon-msg err';
-  }
-}
-
-// coupon input auto-uppercase
-document.getElementById('couponInput').addEventListener('input', function() {
-  const pos = this.selectionStart;
-  this.value = this.value.toUpperCase();
-  this.setSelectionRange(pos, pos);
-});
-
-// ================================================================
-//  PAYMENT — exact same pattern as lovepage
-// ================================================================
-document.getElementById('payBtn').addEventListener('click', function() {
-  const finalAmount = state.finalPrice;
-  const payBtn      = document.getElementById('payBtn');
-
-  if (finalAmount === 0) {
-    onPaymentSuccess('FREE_' + Date.now());
-    return;
-  }
-
-  const options = {
-    key:         RAZORPAY_KEY,
-    amount:      finalAmount * 100,
-    currency:    'INR',
-    name:        'Birthday Surprise 🎂',
-    description: 'Birthday Website for ' + state.recipient,
-    image:       'https://media.tenor.com/WgMTMBNaEEoAAAAi/panda-heart.gif',
-    prefill: {
-      name:    state.sender,
-      email:   '',
-      contact: ''
-    },
-    theme: { color: '#E8477A' },
-    modal: {
-      ondismiss: function() {
-        payBtn.textContent = `Pay ₹${finalAmount} & Get Link 💕`;
-        payBtn.disabled    = false;
-      }
-    },
-    handler: function(response) {
-      onPaymentSuccess(response.razorpay_payment_id);
-    }
-  };
-
-  const rzp = new Razorpay(options);
-  rzp.on('payment.failed', function(response) {
-    payBtn.textContent = `Pay ₹${finalAmount} & Get Link 💕`;
-    payBtn.disabled    = false;
-    console.warn('Payment failed:', response.error);
-  });
-  rzp.open();
-});
-
-// ================================================================
-//  ON PAYMENT SUCCESS
-// ================================================================
-function onPaymentSuccess(paymentId) {
-  state.paymentId = paymentId;
-  closePayPanel();
-  goToPage('page-success');
-  launchConfetti();
-}
-
-// ================================================================
-//  SUCCESS PAGE
-// ================================================================
-function showSuccessPage() {
-  const payload   = { r: state.recipient, s: state.sender, m: state.message };
-  const encoded   = encodeState(payload);
-  const base      = window.location.href.split('#')[0].split('?')[0];
-  const shareLink = `${base}#gift=${encoded}`;
-  document.getElementById('shareableLink').textContent    = shareLink;
-  document.getElementById('successRecipient').textContent = state.recipient;
-}
-
-// ================================================================
-//  ENCODE / DECODE
-// ================================================================
 function encodeState(data) {
   try { return btoa(encodeURIComponent(JSON.stringify(data))); }
   catch(e) { return btoa(JSON.stringify(data)); }
@@ -716,78 +496,70 @@ function decodeState(encoded) {
   catch(e) { try { return JSON.parse(atob(encoded)); } catch(e2) { return null; } }
 }
 
-// ================================================================
-//  COPY & SHARE
-// ================================================================
 function copyLink() {
-  const link = document.getElementById('shareableLink').textContent;
-  const btn  = document.getElementById('copiedMsg');
-  navigator.clipboard.writeText(link).then(() => {
-    btn.classList.remove('hidden');
-    setTimeout(() => btn.classList.add('hidden'), 3000);
-  }).catch(() => {
-    const ta = document.createElement('textarea');
+  var link = document.getElementById('shareableLink').textContent;
+  var msg  = document.getElementById('copiedMsg');
+  navigator.clipboard.writeText(link).then(function() {
+    msg.classList.remove('hidden');
+    setTimeout(function() { msg.classList.add('hidden'); }, 3000);
+  }).catch(function() {
+    var ta = document.createElement('textarea');
     ta.value = link; document.body.appendChild(ta); ta.select();
     document.execCommand('copy'); document.body.removeChild(ta);
-    btn.classList.remove('hidden');
-    setTimeout(() => btn.classList.add('hidden'), 3000);
+    msg.classList.remove('hidden');
+    setTimeout(function() { msg.classList.add('hidden'); }, 3000);
   });
 }
 function shareWhatsApp() {
-  const link = document.getElementById('shareableLink').textContent;
-  const msg  = encodeURIComponent(`🎂 Happy Birthday ${state.recipient}! I made you something special 💕\n\n${link}`);
-  window.open(`https://wa.me/?text=${msg}`, '_blank');
+  var link = document.getElementById('shareableLink').textContent;
+  var msg  = encodeURIComponent('🎂 Happy Birthday ' + state.recipient + '! I made you something special 💕\n\n' + link);
+  window.open('https://wa.me/?text=' + msg, '_blank');
 }
 
-// ================================================================
-//  MUSIC
-// ================================================================
 function toggleMusic() {
-  const btn   = document.getElementById('musicBtn');
-  const audio = document.getElementById('bgMusic');
+  var btn   = document.getElementById('musicBtn');
+  var audio = document.getElementById('bgMusic');
   if (state.musicPlaying) {
     audio.pause(); btn.textContent = '🔇'; state.musicPlaying = false;
   } else {
-    audio.play().catch(() => {}); btn.textContent = '🎵'; state.musicPlaying = true;
+    audio.play().catch(function() {}); btn.textContent = '🎵'; state.musicPlaying = true;
   }
 }
 
-// ================================================================
-//  CONFETTI
-// ================================================================
 function launchConfetti() {
-  const container = document.getElementById('confettiContainer');
-  const colors    = ['#FF7BAC','#FFD700','#E8477A','#FFB6D3','#FF6B9D','#FFF'];
-  for (let i = 0; i < 60; i++) {
-    setTimeout(() => {
-      const piece        = document.createElement('div');
-      piece.className    = 'confetti-piece';
-      piece.style.cssText = `left:${Math.random()*100}vw;background:${colors[Math.floor(Math.random()*colors.length)]};width:${Math.random()*8+6}px;height:${Math.random()*8+6}px;border-radius:${Math.random()>0.5?'50%':'2px'};animation-duration:${Math.random()*3+2}s;animation-delay:${Math.random()*0.5}s`;
-      container.appendChild(piece);
-      setTimeout(() => piece.remove(), 5000);
-    }, i * 30);
+  var container = document.getElementById('confettiContainer');
+  var colors    = ['#FF7BAC','#FFD700','#E8477A','#FFB6D3','#FF6B9D','#FFF'];
+  for (var i = 0; i < 60; i++) {
+    (function(i) {
+      setTimeout(function() {
+        var piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.cssText = 'left:' + (Math.random()*100) + 'vw;background:' + colors[Math.floor(Math.random()*colors.length)] + ';width:' + (Math.random()*8+6) + 'px;height:' + (Math.random()*8+6) + 'px;border-radius:' + (Math.random()>0.5?'50%':'2px') + ';animation-duration:' + (Math.random()*3+2) + 's;animation-delay:' + (Math.random()*0.5) + 's';
+        container.appendChild(piece);
+        setTimeout(function() { piece.remove(); }, 5000);
+      }, i * 30);
+    })(i);
   }
 }
 function launchMiniConfetti() {
-  const container = document.getElementById('confettiContainer');
-  for (let i = 0; i < 20; i++) {
-    setTimeout(() => {
-      const piece        = document.createElement('div');
-      piece.className    = 'confetti-piece';
-      piece.style.cssText = `left:${30+Math.random()*40}vw;background:${['#FF7BAC','#FFD700','#E8477A'][Math.floor(Math.random()*3)]};width:8px;height:8px;border-radius:50%;animation-duration:${Math.random()*2+1.5}s`;
-      container.appendChild(piece);
-      setTimeout(() => piece.remove(), 3500);
-    }, i * 50);
+  var container = document.getElementById('confettiContainer');
+  for (var i = 0; i < 20; i++) {
+    (function(i) {
+      setTimeout(function() {
+        var piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.cssText = 'left:' + (30+Math.random()*40) + 'vw;background:' + ['#FF7BAC','#FFD700','#E8477A'][Math.floor(Math.random()*3)] + ';width:8px;height:8px;border-radius:50%;animation-duration:' + (Math.random()*2+1.5) + 's';
+        container.appendChild(piece);
+        setTimeout(function() { piece.remove(); }, 3500);
+      }, i * 50);
+    })(i);
   }
 }
 
-// ================================================================
-//  URL ROUTING — recipient link decoding
-// ================================================================
 function checkRoute() {
-  const hash = window.location.hash;
+  var hash = window.location.hash;
   if (!hash.startsWith('#gift=')) return;
-  const data = decodeState(hash.slice(6));
+  var data = decodeState(hash.slice(6));
   if (!data) return;
   state.recipient       = data.r || 'Beautiful';
   state.sender          = data.s || 'Someone special';
