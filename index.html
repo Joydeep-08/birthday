@@ -3,14 +3,12 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<!-- ✅ FIX 1: Permissions policy — allow Razorpay sensors it needs -->
 <meta http-equiv="Permissions-Policy" content="accelerometer=*, gyroscope=*"/>
 <title>Birthday Surprise 🎂</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Nunito:wght@300;400;500;600;700&family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-<!-- ✅ FIX 2: Use HTTPS CDN for Tailwind (fixes Mixed Content error) -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"/>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <style>
-  
   :root {
     --pink-soft: #FFE4EF; --pink-mid: #FFB6D3; --pink-deep: #FF7BAC;
     --pink-accent: #E8477A; --cream: #FFF8F3; --blush: #FDEEF5;
@@ -73,42 +71,50 @@
   .illustration { filter: drop-shadow(0 8px 16px rgba(232,71,122,0.2)); }
   .emoji-bounce { animation: emojiBounce 2s ease-in-out infinite; }
   @keyframes emojiBounce { 0%, 100% { transform: translateY(0) rotate(0); } 25% { transform: translateY(-8px) rotate(-5deg); } 75% { transform: translateY(-4px) rotate(5deg); } }
-  .payment-status { border-radius: 16px; padding: 14px 18px; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
-  .payment-status.loading { background: #FFF8E1; color: #F57F17; border: 1.5px solid #FFD54F; }
-  .payment-status.success { background: #E8F5E9; color: #2E7D32; border: 1.5px solid #A5D6A7; }
-  .payment-status.error { background: #FFEBEE; color: #C62828; border: 1.5px solid #EF9A9A; }
-  .payment-status.warning { background: #FFF3E0; color: #E65100; border: 1.5px solid #FFCC80; }
   .secure-badge { display: inline-flex; align-items: center; gap: 6px; background: #E8F5E9; color: #2E7D32; border-radius: 20px; padding: 4px 12px; font-size: 0.75rem; font-weight: 700; }
-  .btn-retry { background: #FFF3E0; color: #E65100; border: 2px solid #FFCC80; border-radius: 50px; padding: 10px 24px; font-weight: 700; cursor: pointer; font-family: 'Nunito', sans-serif; transition: all 0.3s; }
-  .btn-retry:hover { background: #FFE0B2; }
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: var(--pink-soft); }
   ::-webkit-scrollbar-thumb { background: var(--pink-mid); border-radius: 3px; }
-  .payment-method-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0; }
-  .payment-method-btn { background: white; border: 2px solid var(--pink-mid); border-radius: 14px; padding: 12px; text-align: center; cursor: pointer; font-family: 'Nunito', sans-serif; font-size: 0.85rem; font-weight: 600; color: var(--text-mid); transition: all 0.2s; }
-  .payment-method-btn:hover, .payment-method-btn.selected { border-color: var(--pink-accent); background: var(--pink-soft); color: var(--pink-accent); }
-  .payment-method-btn .method-icon { font-size: 1.4rem; display: block; margin-bottom: 4px; }
-  .order-id-box { background: #F3E5F5; border: 1.5px solid #CE93D8; border-radius: 12px; padding: 10px 14px; font-family: 'Courier New', monospace; font-size: 0.75rem; color: #6A1B9A; word-break: break-all; }
 
-  /* ✅ FIX 3: Loading overlay so user sees feedback while Razorpay SDK loads */
-  #rzpLoadingOverlay { display:none; position:fixed; inset:0; background:rgba(253,238,245,0.92); z-index:9998; align-items:center; justify-content:center; flex-direction:column; gap:16px; }
-  #rzpLoadingOverlay.show { display:flex; }
-  .spinner { width:48px; height:48px; border:4px solid var(--pink-mid); border-top-color:var(--pink-accent); border-radius:50%; animation:spin 0.8s linear infinite; }
-  @keyframes spin { to { transform:rotate(360deg); } }
+  /* Payment panel — same style as lovepage */
+  #panelOverlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:190; }
+  #payPanel {
+    display:none; background:#fff; border-radius:20px; padding:1.4rem 1.4rem 1.2rem;
+    position:fixed; bottom:max(1.2rem,env(safe-area-inset-bottom)); left:50%;
+    transform:translateX(-50%); width:calc(100% - 2.4rem); max-width:400px; z-index:200;
+    box-shadow:0 8px 40px rgba(232,71,122,.3); animation:slideUp .25s ease;
+  }
+  @keyframes slideUp { from{transform:translateX(-50%) translateY(20px);opacity:0;} to{transform:translateX(-50%) translateY(0);opacity:1;} }
+  .panel-title { font-weight:700; color:var(--text-dark); font-size:1rem; margin-bottom:1rem; text-align:center; padding-right:1.5rem; font-family:'Nunito',sans-serif; }
+  .panel-close { position:absolute; top:.9rem; right:1rem; background:none; border:none; font-size:1.1rem; cursor:pointer; color:var(--text-light); line-height:1; }
+  .pay-row { display:flex; gap:.5rem; align-items:center; margin-bottom:.4rem; }
+  .panel-coupon-input {
+    flex:1; padding:.65rem 1rem; border:1.5px solid var(--pink-mid); border-radius:12px;
+    font-family:'Nunito',sans-serif; font-size:.9rem; color:var(--text-dark);
+    background:#fffafb; outline:none; text-transform:uppercase;
+  }
+  .panel-coupon-input:focus { border-color:var(--pink-deep); }
+  .apply-btn {
+    padding:.65rem 1rem; background:var(--pink-accent); color:#fff; border:none; border-radius:12px;
+    font-weight:700; font-size:.85rem; cursor:pointer; white-space:nowrap; font-family:'Nunito',sans-serif;
+  }
+  .coupon-msg { font-size:.8rem; min-height:1em; margin-bottom:.4rem; }
+  .coupon-msg.ok { color:#1a8a4a; }
+  .coupon-msg.err { color:#c0392b; }
+  .panel-pay-btn {
+    width:100%; padding:.9rem; border:none; border-radius:14px;
+    background:linear-gradient(135deg, var(--pink-deep), var(--pink-accent)); color:#fff;
+    font-family:'Nunito',sans-serif; font-size:1rem; font-weight:700; cursor:pointer;
+    box-shadow:0 5px 16px rgba(232,71,122,.45); transition:opacity .2s;
+  }
+  .panel-pay-btn:disabled { opacity:.65; cursor:not-allowed; }
 </style>
 </head>
 <body>
 
-<!-- ✅ FIX 4: Loading overlay for Razorpay init delay -->
-<div id="rzpLoadingOverlay">
-  <div class="spinner"></div>
-  <p style="color:var(--pink-accent);font-weight:700;font-family:'Nunito',sans-serif;">Opening secure payment... 🔒</p>
-</div>
-
 <button id="musicBtn" onclick="toggleMusic()" title="Toggle Music">🎵</button>
 <div class="confetti-container" id="confettiContainer"></div>
 
-<!-- ✅ FIX 5: Use HTTPS audio source to prevent Mixed Content error -->
 <audio id="bgMusic" loop>
   <source src="https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mpeg"/>
 </audio>
@@ -149,15 +155,6 @@
             <div>
               <label class="block text-sm font-semibold mb-2" style="color: var(--text-mid);">🎂 Birthday Person's Name</label>
               <input type="text" id="recipientName" class="input-cute" placeholder="e.g. Mahii"/>
-            </div>
-            <!-- ✅ FIX 6: Collect email/phone here for Razorpay prefill → reduces checkout failures -->
-            <div>
-              <label class="block text-sm font-semibold mb-2" style="color: var(--text-mid);">📱 Your Phone (for payment)</label>
-              <input type="tel" id="senderPhone" class="input-cute" placeholder="10-digit mobile number" maxlength="10"/>
-            </div>
-            <div>
-              <label class="block text-sm font-semibold mb-2" style="color: var(--text-mid);">📧 Your Email (for receipt)</label>
-              <input type="email" id="senderEmail" class="input-cute" placeholder="yourname@gmail.com"/>
             </div>
             <div>
               <label class="block text-sm font-semibold mb-2" style="color: var(--text-mid);">💌 Your Birthday Message</label>
@@ -410,107 +407,14 @@
         <div class="flex justify-between text-sm"><span style="color: var(--text-light);">For:</span><span class="font-semibold" style="color: var(--pink-accent);" id="summaryRecipient">—</span></div>
       </div>
       <div class="text-center">
-        <button class="btn-pink w-full shine-effect" onclick="goToPage('page-checkout')">🔓 Unlock & Share — ₹179 only!</button>
+        <button class="btn-pink w-full shine-effect" onclick="openPayPanel()">🔓 Unlock & Share — ₹179 only!</button>
         <p class="text-xs mt-2" style="color: var(--text-light);">One-time · Lifetime access link 💕</p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- PAGE 7: CHECKOUT -->
-<div id="page-checkout" class="page">
-  <div class="min-h-screen" style="background: linear-gradient(160deg, var(--blush) 0%, white 100%);">
-    <div class="max-w-lg mx-auto px-4 py-8">
-      <div class="text-center mb-6">
-        <div class="text-4xl mb-2">🔒</div>
-        <h2 class="font-playfair text-2xl font-bold" style="color: var(--text-dark);">Unlock Birthday Magic</h2>
-        <p class="text-sm mt-1" style="color: var(--text-light);">One-time payment, lifetime link ✨</p>
-        <div class="flex justify-center gap-2 mt-2 flex-wrap">
-          <span class="secure-badge">🔐 SSL Secured</span>
-          <span class="secure-badge">⚡ Razorpay</span>
-          <span class="secure-badge">✅ PCI DSS</span>
-        </div>
-      </div>
-
-      <div id="paymentStatusBanner" class="mb-4 hidden"></div>
-
-      <!-- ✅ FIX 7: Added note about what to do if Razorpay SDK fails -->
-      <div id="sdkWarning" class="hidden mb-4 p-3 rounded-2xl text-sm font-semibold" style="background:#FFF8E1;border:1.5px solid #FFD54F;color:#F57F17;">
-        ⚠️ Payment gateway loading... If this persists, disable your ad-blocker and refresh.
-      </div>
-
-      <div class="card-cute p-5 mb-4 relative">
-        <div class="ribbon">POPULAR</div>
-        <h3 class="font-semibold mb-4" style="color: var(--text-dark);">Order Summary 🎂</h3>
-        <div class="space-y-3">
-          <div class="flex justify-between text-sm"><span style="color: var(--text-mid);">Birthday Surprise Website</span><span class="font-semibold line-through" style="color: var(--text-light);">₹599</span></div>
-          <div class="flex justify-between text-sm"><span style="color: var(--text-mid);">Personalisation (5 pages)</span><span class="font-semibold">Included</span></div>
-          <div class="flex justify-between text-sm"><span style="color: var(--text-mid);">Shareable Link (Lifetime)</span><span class="font-semibold">Included</span></div>
-          <div id="discountRow" class="hidden flex justify-between text-sm"><span class="text-green-600 font-semibold">🎉 Discount Applied!</span><span class="text-green-600 font-semibold" id="discountAmount">-₹0</span></div>
-          <hr style="border-color: var(--pink-soft);"/>
-          <div class="flex justify-between font-bold text-base"><span>Total</span><span style="color: var(--pink-accent);" id="totalAmount">₹179</span></div>
-        </div>
-      </div>
-
-      <div class="card-cute p-4 mb-4">
-        <label class="block text-sm font-semibold mb-2" style="color: var(--text-mid);">🏷️ Discount Code</label>
-        <div class="flex gap-2">
-          <input type="text" id="couponInput" class="coupon-input" placeholder="Enter code..."/>
-          <button class="btn-outline" onclick="applyCoupon()" style="white-space: nowrap; padding: 10px 20px; font-size: 0.9rem;">Apply</button>
-        </div>
-        <p id="couponMsg" class="text-xs mt-2 hidden"></p>
-      </div>
-
-      <div class="card-cute p-4 mb-5">
-        <p class="text-sm font-semibold mb-3" style="color: var(--text-mid);">💳 Choose Payment Method</p>
-        <div class="payment-method-grid">
-          <div class="payment-method-btn selected" id="pm-upi" onclick="selectMethod('upi')">
-            <span class="method-icon">📱</span>UPI / GPay
-          </div>
-          <div class="payment-method-btn" id="pm-card" onclick="selectMethod('card')">
-            <span class="method-icon">💳</span>Credit / Debit Card
-          </div>
-          <div class="payment-method-btn" id="pm-netbanking" onclick="selectMethod('netbanking')">
-            <span class="method-icon">🏦</span>Net Banking
-          </div>
-          <div class="payment-method-btn" id="pm-wallet" onclick="selectMethod('wallet')">
-            <span class="method-icon">👜</span>Paytm / Wallet
-          </div>
-        </div>
-        <p class="text-xs text-center mt-2" style="color: var(--text-light);">✅ All Indian banks · No international cards needed</p>
-      </div>
-
-      <div class="flex justify-center gap-5 mb-5">
-        <div class="text-center"><div class="text-2xl">🔐</div><p class="text-xs mt-1" style="color: var(--text-light);">Secure Pay</p></div>
-        <div class="text-center"><div class="text-2xl">⚡</div><p class="text-xs mt-1" style="color: var(--text-light);">Instant Link</p></div>
-        <div class="text-center"><div class="text-2xl">♾️</div><p class="text-xs mt-1" style="color: var(--text-light);">Lifetime Access</p></div>
-        <div class="text-center"><div class="text-2xl">🇮🇳</div><p class="text-xs mt-1" style="color: var(--text-light);">Made for India</p></div>
-      </div>
-
-      <div class="mb-4 hidden" id="orderIdSection">
-        <p class="text-xs font-semibold mb-1" style="color: var(--text-light);">🔖 Order Reference</p>
-        <div class="order-id-box" id="orderIdDisplay">—</div>
-      </div>
-
-      <button class="btn-pink w-full shine-effect text-lg" id="payBtn" onclick="initiatePayment()">
-        🎀 Pay Securely — <span id="payBtnAmount">₹179</span>
-      </button>
-      <p class="text-center text-xs mt-3" style="color: var(--text-light);">Powered by Razorpay · UPI · Cards · Net Banking · Wallets</p>
-
-      <div id="retrySection" class="hidden mt-4 text-center">
-        <p class="text-sm mb-3" style="color: var(--text-mid);">Payment didn't go through? Try again ↓</p>
-        <div class="flex gap-3 justify-center flex-wrap">
-          <button class="btn-retry" onclick="retryWithUPI()">📱 Try UPI</button>
-          <button class="btn-retry" onclick="retryWithCard()">💳 Try Card</button>
-          <button class="btn-retry" onclick="initiatePayment()">🔄 Retry Same</button>
-        </div>
-        <p class="text-xs mt-3" style="color: var(--text-light);">💡 Most failures fix by switching UPI → Card or vice versa</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- PAGE 8: SUCCESS -->
+<!-- PAGE 7: SUCCESS -->
 <div id="page-success" class="page">
   <div class="min-h-screen" style="background: linear-gradient(135deg, var(--pink-soft) 0%, white 50%, var(--lavender) 100%);">
     <div class="max-w-lg mx-auto px-4 py-8">
@@ -519,15 +423,6 @@
         <h2 class="font-playfair text-3xl font-bold" style="color: var(--text-dark);">Payment Successful!</h2>
         <p class="font-dancing text-xl mt-1" style="color: var(--pink-accent);">Your birthday surprise is ready! 🎀</p>
         <div class="mt-3"><span class="secure-badge">✅ Payment Verified</span></div>
-      </div>
-      <div class="card-cute p-4 mb-5" style="background: #E8F5E9; border: 1.5px solid #A5D6A7;">
-        <p class="text-sm font-semibold text-green-800 mb-2">🧾 Payment Receipt</p>
-        <div class="space-y-1 text-xs" style="color: #2E7D32;">
-          <div class="flex justify-between"><span>Order ID:</span><span class="font-mono" id="receiptOrderId">—</span></div>
-          <div class="flex justify-between"><span>Payment ID:</span><span class="font-mono" id="receiptPaymentId">—</span></div>
-          <div class="flex justify-between"><span>Amount:</span><span class="font-semibold" id="receiptAmount">—</span></div>
-          <div class="flex justify-between"><span>Status:</span><span class="font-semibold">✅ Success</span></div>
-        </div>
       </div>
       <div class="card-cute p-6 mb-6">
         <div class="text-center mb-4">
@@ -552,24 +447,32 @@
   </div>
 </div>
 
+<!-- PAYMENT PANEL (same pattern as lovepage) -->
+<div id="panelOverlay"></div>
+<div id="payPanel">
+  <button class="panel-close" id="panelCloseBtn">✕</button>
+  <p class="panel-title">🎀 Unlock & Share — ₹179</p>
+  <div class="pay-row">
+    <input type="text" class="panel-coupon-input" id="couponInput" placeholder="Coupon code (optional)" autocapitalize="characters" autocomplete="off" spellcheck="false"/>
+    <button class="apply-btn" onclick="applyCoupon()">Apply</button>
+  </div>
+  <p class="coupon-msg" id="couponMsg"></p>
+  <button class="panel-pay-btn" id="payBtn">Pay ₹179 & Get Link 💕</button>
+</div>
+
 <script>
 // ================================================================
 //  STATE
 // ================================================================
 const state = {
   sender: '', recipient: '', message: '',
-  phone: '', email: '',
-  discount: 0, basePrice: 179, finalPrice: 179,
   musicPlaying: false, isRecipientView: false,
-  selectedMethod: 'upi',
-  orderId: null, paymentId: null,
-  attemptCount: 0,
-  rzpReady: false
+  discount: 0, basePrice: 179, finalPrice: 179,
+  paymentId: null
 };
 
-// ================================================================
-//  COUPONS
-// ================================================================
+const RAZORPAY_KEY = 'rzp_live_SvD983baZpuP2A';
+
 const COUPONS = {
   'BDAY50':   50,
   'LOVE100':  100,
@@ -579,65 +482,17 @@ const COUPONS = {
 };
 
 // ================================================================
-//  ✅ FIX 8: Razorpay key — replace with your actual key
-//  Get it from: https://dashboard.razorpay.com/app/website-app-settings/api-keys
-//  Use rzp_test_XXXXXX for testing, rzp_live_XXXXXX for production
-// ================================================================
-const RAZORPAY_KEY = 'rzp_live_SvD983baZpuP2A'; // ← Replace with your key
-
-// ================================================================
-//  ✅ FIX 9: Check Razorpay SDK loaded on page load, warn if not
-// ================================================================
-function checkRazorpaySDK() {
-  if (typeof Razorpay !== 'undefined') {
-    state.rzpReady = true;
-    console.info('✅ Razorpay SDK ready');
-  } else {
-    console.warn('⚠️ Razorpay SDK not loaded yet');
-    // retry after 2s
-    setTimeout(() => {
-      if (typeof Razorpay !== 'undefined') {
-        state.rzpReady = true;
-        console.info('✅ Razorpay SDK ready (delayed)');
-        document.getElementById('sdkWarning').classList.add('hidden');
-      } else {
-        document.getElementById('sdkWarning').classList.remove('hidden');
-      }
-    }, 2000);
-  }
-}
-
-function generateOrderRef() {
-  const ts   = Date.now().toString(36).toUpperCase();
-  const rand = Math.random().toString(36).substring(2,6).toUpperCase();
-  return `BDAY-${ts}-${rand}`;
-}
-
-function encodeState(data) {
-  try { return btoa(encodeURIComponent(JSON.stringify(data))); }
-  catch(e) { return btoa(JSON.stringify(data)); }
-}
-function decodeState(encoded) {
-  try { return JSON.parse(decodeURIComponent(atob(encoded))); }
-  catch(e) { try { return JSON.parse(atob(encoded)); } catch(e2) { return null; } }
-}
-
-// ================================================================
 //  PAGE NAVIGATION
 // ================================================================
 function goToPage(pageId) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById(pageId).classList.add('active');
   window.scrollTo(0, 0);
-  if (pageId === 'page-letter')   updateLetterPage();
-  if (pageId === 'page-reasons')  updateReasonsPage();
-  if (pageId === 'page-gift')     updateGiftPage();
-  if (pageId === 'page-preview')  updatePreviewPage();
-  if (pageId === 'page-success')  showSuccessPage();
-  // Show SDK warning on checkout if SDK not ready
-  if (pageId === 'page-checkout' && !state.rzpReady) {
-    document.getElementById('sdkWarning').classList.remove('hidden');
-  }
+  if (pageId === 'page-letter')  updateLetterPage();
+  if (pageId === 'page-reasons') updateReasonsPage();
+  if (pageId === 'page-gift')    updateGiftPage();
+  if (pageId === 'page-preview') updatePreviewPage();
+  if (pageId === 'page-success') showSuccessPage();
 }
 
 // ================================================================
@@ -647,14 +502,10 @@ function startJourney() {
   const sender    = document.getElementById('senderName').value.trim();
   const recipient = document.getElementById('recipientName').value.trim();
   const message   = document.getElementById('customMessage').value.trim();
-  const phone     = document.getElementById('senderPhone').value.trim();
-  const email     = document.getElementById('senderEmail').value.trim();
   if (!sender || !recipient) { alert('💕 Please enter both names to continue!'); return; }
   state.sender    = sender;
   state.recipient = recipient;
   state.message   = message || "You mean the world to me! Wishing you a day as beautiful as you are 💕";
-  state.phone     = phone;
-  state.email     = email;
   launchConfetti();
   setTimeout(() => goToPage('page-storybook'), 300);
 }
@@ -704,10 +555,9 @@ function updatePreviewPage() {
 function flipCard(card) { card.classList.toggle('flipped'); }
 
 function pickFlower(el, wish) {
-  const reveal = document.getElementById('wishReveal');
-  reveal.textContent = wish;
-  reveal.classList.remove('hidden');
-  el.style.opacity   = '0.5';
+  document.getElementById('wishReveal').textContent = wish;
+  document.getElementById('wishReveal').classList.remove('hidden');
+  el.style.opacity = '0.5';
   el.style.transform = 'scale(0.9)';
   el.onclick = null;
   launchMiniConfetti();
@@ -717,9 +567,9 @@ function pickFlower(el, wish) {
 //  GIFT BOX
 // ================================================================
 function blowGiftCandle() {
-  const flame   = document.getElementById('flameGroup');
-  const smoke   = document.getElementById('smokeGroup');
-  const btn     = document.getElementById('blowCandleBtn');
+  const flame = document.getElementById('flameGroup');
+  const smoke = document.getElementById('smokeGroup');
+  const btn   = document.getElementById('blowCandleBtn');
   flame.style.transition = 'opacity 0.4s ease';
   flame.style.opacity    = '0';
   smoke.style.opacity    = '1';
@@ -743,13 +593,18 @@ function openGiftBox() {
 }
 
 // ================================================================
-//  PAYMENT METHOD SELECTION
+//  PAYMENT PANEL
 // ================================================================
-function selectMethod(method) {
-  state.selectedMethod = method;
-  document.querySelectorAll('.payment-method-btn').forEach(b => b.classList.remove('selected'));
-  document.getElementById('pm-' + method).classList.add('selected');
+function openPayPanel() {
+  document.getElementById('panelOverlay').style.display = 'block';
+  document.getElementById('payPanel').style.display     = 'block';
 }
+function closePayPanel() {
+  document.getElementById('panelOverlay').style.display = 'none';
+  document.getElementById('payPanel').style.display     = 'none';
+}
+document.getElementById('panelOverlay').addEventListener('click', closePayPanel);
+document.getElementById('panelCloseBtn').addEventListener('click', closePayPanel);
 
 // ================================================================
 //  COUPON
@@ -757,242 +612,108 @@ function selectMethod(method) {
 function applyCoupon() {
   const code    = document.getElementById('couponInput').value.trim().toUpperCase();
   const msgEl   = document.getElementById('couponMsg');
-  const discRow = document.getElementById('discountRow');
+  const payBtn  = document.getElementById('payBtn');
+
   if (COUPONS[code] !== undefined) {
-    const discount   = COUPONS[code];
-    state.discount   = discount;
-    state.finalPrice = Math.max(0, state.basePrice - discount);
-    document.getElementById('discountAmount').textContent = `-₹${discount}`;
-    document.getElementById('totalAmount').textContent    = state.finalPrice === 0 ? '🎉 FREE' : `₹${state.finalPrice}`;
-    document.getElementById('payBtnAmount').textContent   = state.finalPrice === 0 ? 'FREE' : `₹${state.finalPrice}`;
-    discRow.classList.remove('hidden');
-    msgEl.textContent = `🎉 "${code}" applied — saved ₹${discount}${state.finalPrice === 0 ? ' (FREE! 🥳)' : ''}`;
-    msgEl.className   = 'text-xs mt-2 text-green-600 font-semibold';
-    msgEl.classList.remove('hidden');
+    state.discount   = COUPONS[code];
+    state.finalPrice = Math.max(0, state.basePrice - state.discount);
+    msgEl.textContent = `✓ Applied — saved ₹${state.discount}${state.finalPrice === 0 ? ' (FREE! 🥳)' : ''}`;
+    msgEl.className   = 'coupon-msg ok';
+    payBtn.textContent = state.finalPrice === 0 ? 'Get Free Link 🎉' : `Pay ₹${state.finalPrice} & Get Link 💕`;
+  } else if (code === '') {
+    state.discount = 0; state.finalPrice = state.basePrice;
+    msgEl.textContent = ''; msgEl.className = 'coupon-msg';
+    payBtn.textContent = 'Pay ₹179 & Get Link 💕';
   } else {
-    msgEl.textContent = '❌ Invalid code. Try: BDAY50, LOVE100, SWEET30';
-    msgEl.className   = 'text-xs mt-2 text-red-500';
-    msgEl.classList.remove('hidden');
+    state.discount = 0; state.finalPrice = state.basePrice;
+    msgEl.textContent = '✗ Invalid code'; msgEl.className = 'coupon-msg err';
   }
 }
 
-// ================================================================
-//  PAYMENT STATUS BANNER
-// ================================================================
-function showStatus(type, msg) {
-  const el   = document.getElementById('paymentStatusBanner');
-  const icons = { loading:'⏳', success:'✅', error:'❌', warning:'⚠️' };
-  el.className = `payment-status ${type} mb-4`;
-  el.innerHTML = `<span style="font-size:1.2rem">${icons[type]}</span><span>${msg}</span>`;
-  el.classList.remove('hidden');
-}
-function hideStatus() {
-  document.getElementById('paymentStatusBanner').classList.add('hidden');
-}
+// coupon input auto-uppercase
+document.getElementById('couponInput').addEventListener('input', function() {
+  const pos = this.selectionStart;
+  this.value = this.value.toUpperCase();
+  this.setSelectionRange(pos, pos);
+});
 
 // ================================================================
-//  PAYMENT — MAIN
-//  ✅ FIX 10: currency duplicate removed, prefill populated from
-//             phone/email collected on page 1
-//  ✅ FIX 11: loading overlay prevents double-taps
-//  ✅ FIX 12: Razorpay 'config' block added to restrict methods
-//             to domestic INR only (prevents inactive method error)
+//  PAYMENT — exact same pattern as lovepage
 // ================================================================
-function initiatePayment() {
-  const btn = document.getElementById('payBtn');
-  state.attemptCount++;
+document.getElementById('payBtn').addEventListener('click', function() {
+  const finalAmount = state.finalPrice;
+  const payBtn      = document.getElementById('payBtn');
 
-  // FREE coupon
-  if (state.finalPrice === 0) {
-    state.orderId   = generateOrderRef();
-    state.paymentId = 'FREE-' + state.orderId;
-    showStatus('success', 'Coupon unlocked for free! Opening your link...');
-    btn.disabled = true;
-    setTimeout(() => { goToPage('page-success'); launchConfetti(); }, 800);
+  if (finalAmount === 0) {
+    onPaymentSuccess('FREE_' + Date.now());
     return;
   }
 
-  // Prevent double tap
-  if (btn.disabled) return;
-
-  state.orderId = generateOrderRef();
-  document.getElementById('orderIdDisplay').textContent = state.orderId;
-  document.getElementById('orderIdSection').classList.remove('hidden');
-
-  btn.textContent = '⏳ Opening payment...';
-  btn.disabled    = true;
-  hideStatus();
-  document.getElementById('retrySection').classList.add('hidden');
-  document.getElementById('rzpLoadingOverlay').classList.add('show');
-
   const options = {
-    key:      RAZORPAY_KEY,
-    amount:   state.finalPrice * 100,
-    currency: 'INR',
-    name:     'Birthday Surprise 🎂',
-    description: `Birthday Website for ${state.recipient}`,
-
-    // ✅ FIX 13: Prefill with collected phone & email
+    key:         RAZORPAY_KEY,
+    amount:      finalAmount * 100,
+    currency:    'INR',
+    name:        'Birthday Surprise 🎂',
+    description: 'Birthday Website for ' + state.recipient,
+    image:       'https://media.tenor.com/WgMTMBNaEEoAAAAi/panda-heart.gif',
     prefill: {
       name:    state.sender,
-      email:   state.email    || '',
-      contact: state.phone    || ''
+      email:   '',
+      contact: ''
     },
-
-    // ✅ FIX 14: config.display restricts to INR domestic methods only
-    // This directly prevents "inactive payment method" errors
-    config: {
-      display: {
-        blocks: {
-          utib: { name: 'Pay via UPI or Cards', instruments: [
-            { method: 'upi' },
-            { method: 'card' },
-            { method: 'netbanking' },
-            { method: 'wallet' }
-          ]}
-        },
-        sequence: ['block.utib'],
-        preferences: { show_default_blocks: false }
-      }
-    },
-
-    theme: { color: '#E8477A', hide_topbar: false },
-
-    handler: function(response) {
-      document.getElementById('rzpLoadingOverlay').classList.remove('show');
-      state.paymentId = response.razorpay_payment_id || ('DEMO-' + Date.now());
-      btn.textContent = '✅ Payment done!';
-      showStatus('success', 'Payment verified! Building your link...');
-      logPaymentForWebhook(response);
-      setTimeout(() => { goToPage('page-success'); launchConfetti(); }, 1000);
-    },
-
+    theme: { color: '#E8477A' },
     modal: {
-      backdropclose: false,
-      escape: false,
-      animation: true,
       ondismiss: function() {
-        document.getElementById('rzpLoadingOverlay').classList.remove('show');
-        btn.textContent = `🎀 Pay Securely — ₹${state.finalPrice}`;
-        btn.disabled    = false;
-        showStatus('warning', 'Payment cancelled. Use the buttons below to try again.');
-        document.getElementById('retrySection').classList.remove('hidden');
+        payBtn.textContent = `Pay ₹${finalAmount} & Get Link 💕`;
+        payBtn.disabled    = false;
       }
+    },
+    handler: function(response) {
+      onPaymentSuccess(response.razorpay_payment_id);
     }
   };
 
-  if (typeof Razorpay !== 'undefined') {
-    try {
-      const rzp = new Razorpay(options);
-      rzp.on('payment.failed', function(response) {
-        document.getElementById('rzpLoadingOverlay').classList.remove('show');
-        btn.textContent = `🎀 Pay Securely — ₹${state.finalPrice}`;
-        btn.disabled    = false;
-        showStatus('error', getFriendlyError(response.error.code, response.error.description));
-        document.getElementById('retrySection').classList.remove('hidden');
-        console.warn('[Payment Failed]', response.error.code, response.error.description);
-      });
-      // ✅ FIX 15: Hide overlay AFTER modal opens (not before)
-      rzp.on('ready', function() {
-        document.getElementById('rzpLoadingOverlay').classList.remove('show');
-      });
-      rzp.open();
-      // Fallback: hide overlay after 3s regardless
-      setTimeout(() => document.getElementById('rzpLoadingOverlay').classList.remove('show'), 3000);
-    } catch(err) {
-      console.error('Razorpay init error:', err);
-      document.getElementById('rzpLoadingOverlay').classList.remove('show');
-      fallbackPaymentMode(btn);
-    }
-  } else {
-    document.getElementById('rzpLoadingOverlay').classList.remove('show');
-    console.warn('Razorpay SDK not loaded — demo mode');
-    fallbackPaymentMode(btn);
-  }
-}
+  const rzp = new Razorpay(options);
+  rzp.on('payment.failed', function(response) {
+    payBtn.textContent = `Pay ₹${finalAmount} & Get Link 💕`;
+    payBtn.disabled    = false;
+    console.warn('Payment failed:', response.error);
+  });
+  rzp.open();
+});
 
 // ================================================================
-//  FRIENDLY ERROR MESSAGES
+//  ON PAYMENT SUCCESS
 // ================================================================
-function getFriendlyError(code, desc) {
-  const map = {
-    'BAD_REQUEST_ERROR':  '⚠️ Bank declined. Try a different card or UPI.',
-    'GATEWAY_ERROR':      '⚠️ Bank gateway timeout. Please retry in 30 seconds.',
-    'SERVER_ERROR':       '⚠️ Razorpay server error. Please retry.',
-    'PAYMENT_FAILED':     '❌ Payment failed. Switch to UPI or another card.',
-    'INSUFFICIENT_FUNDS': '❌ Insufficient funds. Try another card or UPI.',
-    'CARD_DECLINED':      '❌ Card declined. Try UPI or net banking instead.',
-    'INVALID_CARD':       '❌ Invalid card details. Check and retry.',
-    'TIMED_OUT':          '⏱️ Timed out. UPI payments expire in 5 min — please retry.',
-    'USER_CANCELLED':     '🚫 You cancelled. Tap below to try again.',
-    'NETWORK_ERROR':      '📶 Network issue. Check connection and retry.',
-  };
-  if (code && map[code]) return map[code];
-  if (desc && desc.toLowerCase().includes('international')) return '🌐 International cards not accepted. Please use UPI or an Indian card.';
-  if (desc && desc.toLowerCase().includes('inactive'))      return '⚠️ This payment method is inactive on your account. Switch to UPI.';
-  return `❌ Payment failed (${code || 'unknown'}). Try a different method below.`;
-}
-
-// ================================================================
-//  RETRY HELPERS
-// ================================================================
-function retryWithUPI()  { selectMethod('upi');  initiatePayment(); }
-function retryWithCard() { selectMethod('card'); initiatePayment(); }
-
-// ================================================================
-//  FALLBACK / DEMO MODE
-// ================================================================
-function fallbackPaymentMode(btn) {
-  showStatus('loading', 'Demo mode: processing...');
-  setTimeout(() => {
-    state.paymentId = 'DEMO-' + Date.now();
-    state.orderId   = state.orderId || generateOrderRef();
-    btn.textContent = `🎀 Pay Securely — ₹${state.finalPrice}`;
-    btn.disabled    = false;
-    goToPage('page-success');
-    launchConfetti();
-  }, 1500);
-}
-
-// ================================================================
-//  WEBHOOK LOG
-//  ⚠️  PRODUCTION: Verify razorpay_signature on your backend!
-//  Backend verification:
-//    HMAC-SHA256(order_id + "|" + payment_id, KEY_SECRET)
-// ================================================================
-function logPaymentForWebhook(rzpResponse) {
-  const log = {
-    order_id:   state.orderId,
-    payment_id: rzpResponse.razorpay_payment_id,
-    signature:  rzpResponse.razorpay_signature,
-    amount:     state.finalPrice,
-    recipient:  state.recipient,
-    sender:     state.sender,
-    timestamp:  new Date().toISOString()
-  };
-  try { localStorage.setItem('last_payment_' + state.orderId, JSON.stringify(log)); } catch(e) {}
-  console.info('[Payment Log — Send to backend for webhook verification]', log);
-  // Uncomment and replace URL for production:
-  // fetch('https://your-backend.com/verify-payment', {
-  //   method: 'POST',
-  //   headers: { 'Content-Type': 'application/json' },
-  //   body: JSON.stringify(log)
-  // });
+function onPaymentSuccess(paymentId) {
+  state.paymentId = paymentId;
+  closePayPanel();
+  goToPage('page-success');
+  launchConfetti();
 }
 
 // ================================================================
 //  SUCCESS PAGE
 // ================================================================
 function showSuccessPage() {
-  const payload    = { r: state.recipient, s: state.sender, m: state.message };
-  const encoded    = encodeState(payload);
-  const base       = window.location.href.split('#')[0].split('?')[0];
-  const shareLink  = `${base}#gift=${encoded}`;
+  const payload   = { r: state.recipient, s: state.sender, m: state.message };
+  const encoded   = encodeState(payload);
+  const base      = window.location.href.split('#')[0].split('?')[0];
+  const shareLink = `${base}#gift=${encoded}`;
   document.getElementById('shareableLink').textContent    = shareLink;
   document.getElementById('successRecipient').textContent = state.recipient;
-  document.getElementById('receiptOrderId').textContent   = state.orderId   || '—';
-  document.getElementById('receiptPaymentId').textContent = state.paymentId || '—';
-  document.getElementById('receiptAmount').textContent    = state.finalPrice === 0 ? 'FREE' : `₹${state.finalPrice}`;
+}
+
+// ================================================================
+//  ENCODE / DECODE
+// ================================================================
+function encodeState(data) {
+  try { return btoa(encodeURIComponent(JSON.stringify(data))); }
+  catch(e) { return btoa(JSON.stringify(data)); }
+}
+function decodeState(encoded) {
+  try { return JSON.parse(decodeURIComponent(atob(encoded))); }
+  catch(e) { try { return JSON.parse(atob(encoded)); } catch(e2) { return null; } }
 }
 
 // ================================================================
@@ -1000,15 +721,16 @@ function showSuccessPage() {
 // ================================================================
 function copyLink() {
   const link = document.getElementById('shareableLink').textContent;
+  const btn  = document.getElementById('copiedMsg');
   navigator.clipboard.writeText(link).then(() => {
-    document.getElementById('copiedMsg').classList.remove('hidden');
-    setTimeout(() => document.getElementById('copiedMsg').classList.add('hidden'), 3000);
+    btn.classList.remove('hidden');
+    setTimeout(() => btn.classList.add('hidden'), 3000);
   }).catch(() => {
     const ta = document.createElement('textarea');
     ta.value = link; document.body.appendChild(ta); ta.select();
     document.execCommand('copy'); document.body.removeChild(ta);
-    document.getElementById('copiedMsg').classList.remove('hidden');
-    setTimeout(() => document.getElementById('copiedMsg').classList.add('hidden'), 3000);
+    btn.classList.remove('hidden');
+    setTimeout(() => btn.classList.add('hidden'), 3000);
   });
 }
 function shareWhatsApp() {
@@ -1065,43 +787,17 @@ function launchMiniConfetti() {
 function checkRoute() {
   const hash = window.location.hash;
   if (!hash.startsWith('#gift=')) return;
-  const encoded = hash.slice(6);
-  const data    = decodeState(encoded);
+  const data = decodeState(hash.slice(6));
   if (!data) return;
   state.recipient       = data.r || 'Beautiful';
   state.sender          = data.s || 'Someone special';
   state.message         = data.m || 'You are loved beyond words 💕';
   state.isRecipientView = true;
-  populateRecipientContent();
   goToPage('page-storybook');
   launchConfetti();
 }
-function populateRecipientContent() {
-  const fields = {
-    letterSubtitle:    `For ${state.recipient} with love 💕`,
-    customMsgDisplay:  state.message,
-    senderNameDisplay: `— ${state.sender} ❤️`,
-    reasonsSubtitle:   `for ${state.recipient} ✨`,
-    giftRecipientName: state.recipient + '!',
-    giftCandleName:    state.recipient
-  };
-  Object.entries(fields).forEach(([id, val]) => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = val;
-  });
-}
 
-// ================================================================
-//  INIT
-// ================================================================
-document.addEventListener('DOMContentLoaded', () => {
-  checkRoute();
-  checkRazorpaySDK();
-});
+document.addEventListener('DOMContentLoaded', checkRoute);
 </script>
-
-<!-- ✅ FIX 16: Load Razorpay SDK synchronously (not async) to ensure
-     it's available when user reaches checkout page -->
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </body>
 </html>
