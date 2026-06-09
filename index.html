@@ -6,6 +6,7 @@
 <title>Birthday Surprise 🎂</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Nunito:wght@300;400;500;600;700&family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"/>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <style>
   :root {
     --pink-soft: #FFE4EF; --pink-mid: #FFB6D3; --pink-deep: #FF7BAC;
@@ -66,6 +67,21 @@
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: var(--pink-soft); }
   ::-webkit-scrollbar-thumb { background: var(--pink-mid); border-radius: 3px; }
+
+  /* Payment page styles */
+  .price-tag { background: linear-gradient(135deg, var(--pink-deep), var(--pink-accent)); color: white; border-radius: 20px; padding: 6px 18px; font-size: 1.4rem; font-weight: 700; display: inline-block; }
+  .price-strike { text-decoration: line-through; color: var(--text-light); font-size: 1rem; }
+  .coupon-input-wrap { display: flex; gap: 10px; }
+  .coupon-input-wrap .input-cute { border-radius: 16px; }
+  .btn-apply { background: var(--pink-soft); color: var(--pink-accent); font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.95rem; padding: 14px 22px; border-radius: 16px; border: 2px solid var(--pink-mid); cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+  .btn-apply:hover { background: var(--pink-mid); color: white; }
+  .coupon-success { color: #16a34a; font-size: 0.85rem; font-weight: 600; margin-top: 6px; }
+  .coupon-error { color: #dc2626; font-size: 0.85rem; font-weight: 600; margin-top: 6px; }
+  .feature-list li { display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: 0.92rem; color: var(--text-mid); border-bottom: 1px dashed rgba(255,182,211,0.4); }
+  .feature-list li:last-child { border-bottom: none; }
+  .badge-free { background: #dcfce7; color: #16a34a; font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 20px; letter-spacing: 0.5px; }
+  .badge-pay { background: #fef3c7; color: #92400e; font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 20px; letter-spacing: 0.5px; }
+  .payment-secure { font-size: 0.75rem; color: var(--text-light); text-align: center; margin-top: 10px; }
 </style>
 </head>
 <body>
@@ -335,9 +351,79 @@
           </div>
         </div>
         <div class="text-center mt-6" id="giftNextBtn">
-          <button class="btn-pink" onclick="goToPage('page-share')">Get Shareable Link 🔗</button>
-          <p class="text-xs mt-2" style="color: var(--text-light);">Share your birthday surprise — completely free! 💕</p>
+          <button class="btn-pink" onclick="goToPage('page-payment')">Get Shareable Link 🔗</button>
+          <p class="text-xs mt-2" style="color: var(--text-light);">Share your birthday surprise — just ₹99! 💕</p>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 5.5: PAYMENT -->
+<div id="page-payment" class="page">
+  <div class="min-h-screen" style="background: linear-gradient(135deg, var(--blush) 0%, var(--lavender) 50%, var(--pink-soft) 100%);">
+    <div class="max-w-lg mx-auto px-4 py-8">
+      <div class="text-center mb-6">
+        <div class="text-4xl float-anim mb-2">🎀</div>
+        <h2 class="font-playfair text-3xl font-bold" style="color: var(--text-dark);">Almost There!</h2>
+        <p class="font-dancing text-xl mt-1" style="color: var(--pink-accent);">Unlock your shareable birthday surprise 🌸</p>
+      </div>
+
+      <!-- What you get -->
+      <div class="card-cute p-6 mb-5">
+        <p class="font-semibold text-sm mb-3" style="color: var(--text-mid);">✨ What's included</p>
+        <ul class="feature-list">
+          <li>🎂 <span style="flex:1;">Animated birthday experience (5 pages)</span> <span class="badge-free">FREE</span></li>
+          <li>💌 <span style="flex:1;">Personalised love letter & reasons</span> <span class="badge-free">FREE</span></li>
+          <li>🎁 <span style="flex:1;">Interactive gift box & cake</span> <span class="badge-free">FREE</span></li>
+          <li>🔗 <span style="flex:1;">Shareable link for your person</span> <span class="badge-pay">₹99 only</span></li>
+          <li>💬 <span style="flex:1;">WhatsApp share with one tap</span> <span class="badge-pay">₹99 only</span></li>
+        </ul>
+      </div>
+
+      <!-- Pricing -->
+      <div class="card-cute p-6 mb-5">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <p class="font-semibold" style="color: var(--text-dark);">Birthday Surprise Link</p>
+            <p class="text-xs mt-1" style="color: var(--text-light);">One-time · Unlimited shares</p>
+          </div>
+          <div class="text-right">
+            <p class="price-strike">₹299</p>
+            <span class="price-tag" id="finalPriceDisplay">₹99</span>
+          </div>
+        </div>
+
+        <!-- Coupon -->
+        <div class="mb-1">
+          <label class="block text-xs font-semibold mb-2" style="color: var(--text-mid);">🏷️ Have a coupon code?</label>
+          <div class="coupon-input-wrap">
+            <input type="text" id="couponInput" class="input-cute" placeholder="Enter coupon code" style="text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()"/>
+            <button class="btn-apply" onclick="applyCoupon()">Apply</button>
+          </div>
+          <p id="couponMsg" class="hidden text-xs mt-1"></p>
+        </div>
+
+        <div class="divider-hearts" style="margin: 16px 0;">· · ·</div>
+
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm font-semibold" style="color: var(--text-dark);">Total to pay</span>
+          <span class="font-playfair text-2xl font-bold" style="color: var(--pink-accent);" id="totalDisplay">₹99</span>
+        </div>
+        <p class="text-xs" style="color: var(--text-light);" id="savingsDisplay">You save ₹200 today 🎉</p>
+      </div>
+
+      <!-- Pay button -->
+      <div class="text-center mb-4">
+        <button class="btn-pink shine-effect w-full" onclick="initiatePayment()" id="payBtn">
+          💳 Pay &amp; Get Shareable Link
+        </button>
+        <p class="payment-secure mt-3">🔒 Secured by Razorpay · UPI, Cards, NetBanking accepted</p>
+      </div>
+
+      <!-- Back -->
+      <div class="text-center">
+        <button class="btn-outline" onclick="goToPage('page-gift')" style="font-size:0.85rem; padding:10px 24px;">← Go Back</button>
       </div>
     </div>
   </div>
@@ -382,29 +468,126 @@
 <script>
 const state = {
   sender: '', recipient: '', message: '',
-  musicPlaying: false, isRecipientView: false
+  musicPlaying: false, isRecipientView: false,
+  paymentDone: false, couponApplied: false,
+  finalAmount: 9900 // in paise = ₹99
 };
 
+// COUPON CONFIG
+// Add more coupons here as needed:
+// 'COUPON_CODE': { amount: <paise>, label: '₹X' }
+const COUPONS = {
+  'BIRTHDAY1': { amount: 100, label: '₹1' },   // ₹1 only
+  'LOVE2025':  { amount: 4900, label: '₹49' },  // ₹49
+  'FREE100':   { amount: 100, label: '₹1' },    // also ₹1
+};
+
+function applyCoupon() {
+  var code = document.getElementById('couponInput').value.trim().toUpperCase();
+  var msgEl = document.getElementById('couponMsg');
+  var totalEl = document.getElementById('totalDisplay');
+  var savingsEl = document.getElementById('savingsDisplay');
+
+  if (!code) {
+    showCouponMsg('Please enter a coupon code 🏷️', false);
+    return;
+  }
+
+  if (COUPONS[code]) {
+    var coupon = COUPONS[code];
+    state.finalAmount = coupon.amount;
+    state.couponApplied = true;
+    document.getElementById('finalPriceDisplay').textContent = coupon.label;
+    totalEl.textContent = coupon.label;
+    var saved = 9900 - coupon.amount;
+    savingsEl.textContent = 'Coupon applied! You save ₹' + (saved/100) + ' 🎉';
+    showCouponMsg('✅ Coupon "' + code + '" applied! Price updated to ' + coupon.label, true);
+    document.getElementById('couponInput').disabled = true;
+    document.querySelector('.btn-apply').disabled = true;
+    document.querySelector('.btn-apply').style.opacity = '0.5';
+  } else {
+    showCouponMsg('❌ Invalid coupon code. Try again!', false);
+  }
+}
+
+function showCouponMsg(text, success) {
+  var el = document.getElementById('couponMsg');
+  el.textContent = text;
+  el.className = success ? 'coupon-success' : 'coupon-error';
+  el.classList.remove('hidden');
+}
+
+function initiatePayment() {
+  var btn = document.getElementById('payBtn');
+  btn.textContent = '⏳ Opening payment...';
+  btn.disabled = true;
+
+  var options = {
+    key: 'rzp_live_Sz9gct8RO5E1jB',
+    amount: state.finalAmount,
+    currency: 'INR',
+    name: 'Birthday Surprise 🎂',
+    description: 'Shareable birthday surprise link for ' + state.recipient,
+    image: '',
+    handler: function(response) {
+      state.paymentDone = true;
+      goToPage('page-share');
+      launchConfetti();
+    },
+    prefill: {
+      name: state.sender,
+    },
+    notes: {
+      recipient: state.recipient,
+      sender: state.sender
+    },
+    theme: {
+      color: '#FF7BAC'
+    },
+    modal: {
+      ondismiss: function() {
+        btn.textContent = '💳 Pay & Get Shareable Link';
+        btn.disabled = false;
+      }
+    }
+  };
+
+  try {
+    var rzp = new Razorpay(options);
+    rzp.on('payment.failed', function(resp) {
+      alert('Payment failed. Please try again 💕');
+      btn.textContent = '💳 Pay & Get Shareable Link';
+      btn.disabled = false;
+    });
+    rzp.open();
+  } catch(e) {
+    alert('Could not load payment gateway. Please check your internet connection.');
+    btn.textContent = '💳 Pay & Get Shareable Link';
+    btn.disabled = false;
+  }
+}
+
 function goToPage(pageId) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
   document.getElementById(pageId).classList.add('active');
   window.scrollTo(0, 0);
   if (pageId === 'page-letter')  updateLetterPage();
   if (pageId === 'page-reasons') updateReasonsPage();
   if (pageId === 'page-gift')    updateGiftPage();
+  if (pageId === 'page-payment') updatePaymentPage();
   if (pageId === 'page-share')   updateSharePage();
 }
 
 function startJourney() {
-  const sender    = document.getElementById('senderName').value.trim();
-  const recipient = document.getElementById('recipientName').value.trim();
-  const message   = document.getElementById('customMessage').value.trim();
+  var sender    = document.getElementById('senderName').value.trim();
+  var recipient = document.getElementById('recipientName').value.trim();
+  var message   = document.getElementById('customMessage').value.trim();
   if (!sender || !recipient) { alert('💕 Please enter both names to continue!'); return; }
   state.sender    = sender;
   state.recipient = recipient;
   state.message   = message || "You mean the world to me! Wishing you a day as beautiful as you are 💕";
   launchConfetti();
-  setTimeout(() => goToPage('page-storybook'), 300);
+  setTimeout(function() { goToPage('page-storybook'); }, 300);
 }
 
 function updateLetterPage() {
@@ -414,6 +597,23 @@ function updateLetterPage() {
 }
 function updateReasonsPage() {
   document.getElementById('reasonsSubtitle').textContent = 'for ' + state.recipient + ' ✨';
+}
+function updatePaymentPage() {
+  // Reset coupon state each time payment page opens
+  if (!state.couponApplied) {
+    state.finalAmount = 9900;
+    document.getElementById('finalPriceDisplay').textContent = '₹99';
+    document.getElementById('totalDisplay').textContent = '₹99';
+    document.getElementById('savingsDisplay').textContent = 'You save ₹200 today 🎉';
+    document.getElementById('couponInput').value = '';
+    document.getElementById('couponInput').disabled = false;
+    var applyBtn = document.querySelector('.btn-apply');
+    if (applyBtn) { applyBtn.disabled = false; applyBtn.style.opacity = '1'; }
+    var msgEl = document.getElementById('couponMsg');
+    if (msgEl) msgEl.classList.add('hidden');
+  }
+  var btn = document.getElementById('payBtn');
+  if (btn) { btn.textContent = '💳 Pay & Get Shareable Link'; btn.disabled = false; }
 }
 function updateGiftPage() {
   document.getElementById('giftRecipientName').textContent = state.recipient + '!';
@@ -433,7 +633,7 @@ function updateGiftPage() {
     if (state.isRecipientView) {
       nextBtn.innerHTML = '<div class="card-cute p-4 mt-4 text-center" style="background: linear-gradient(135deg, white, var(--pink-soft));"><p class="font-dancing text-2xl" style="color: var(--pink-accent);">Made with 💕 just for you</p><p class="text-sm mt-2" style="color: var(--text-mid);">From <strong>' + state.sender + '</strong>, with all my love 🌸</p></div>';
     } else {
-      nextBtn.innerHTML = '<button class="btn-pink" onclick="goToPage(\'page-share\')">Get Shareable Link 🔗</button><p class="text-xs mt-2" style="color: var(--text-light);">Share your birthday surprise — completely free! 💕</p>';
+      nextBtn.innerHTML = '<button class="btn-pink" onclick="goToPage(\'page-payment\')">Get Shareable Link 🔗</button><p class="text-xs mt-2" style="color: var(--text-light);">Share your birthday surprise — just ₹99! 💕</p>';
     }
   }
 }
