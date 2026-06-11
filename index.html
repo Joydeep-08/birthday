@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Birthday Surprise 🎂</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Nunito:wght@300;400;500;600;700&family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet"/>
@@ -68,8 +67,6 @@
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: var(--pink-soft); }
   ::-webkit-scrollbar-thumb { background: var(--pink-mid); border-radius: 3px; }
-
-  /* Payment page styles */
   .price-tag { background: linear-gradient(135deg, var(--pink-deep), var(--pink-accent)); color: white; border-radius: 20px; padding: 6px 18px; font-size: 1.4rem; font-weight: 700; display: inline-block; }
   .price-strike { text-decoration: line-through; color: var(--text-light); font-size: 1rem; }
   .coupon-input-wrap { display: flex; gap: 10px; }
@@ -89,7 +86,6 @@
 
 <button id="musicBtn" onclick="toggleMusic()" title="Toggle Music">🎵</button>
 <div class="confetti-container" id="confettiContainer"></div>
-
 <audio id="bgMusic" loop>
   <source src="https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mpeg"/>
 </audio>
@@ -369,20 +365,16 @@
         <h2 class="font-playfair text-3xl font-bold" style="color: var(--text-dark);">Almost There!</h2>
         <p class="font-dancing text-xl mt-1" style="color: var(--pink-accent);">Unlock your shareable birthday surprise 🌸</p>
       </div>
-
-      <!-- What you get -->
       <div class="card-cute p-6 mb-5">
         <p class="font-semibold text-sm mb-3" style="color: var(--text-mid);">✨ What's included</p>
         <ul class="feature-list">
           <li>🎂 <span style="flex:1;">Animated birthday experience (5 pages)</span> <span class="badge-free">FREE</span></li>
-          <li>💌 <span style="flex:1;">Personalised love letter & reasons</span> <span class="badge-free">FREE</span></li>
-          <li>🎁 <span style="flex:1;">Interactive gift box & cake</span> <span class="badge-free">FREE</span></li>
+          <li>💌 <span style="flex:1;">Personalised love letter &amp; reasons</span> <span class="badge-free">FREE</span></li>
+          <li>🎁 <span style="flex:1;">Interactive gift box &amp; cake</span> <span class="badge-free">FREE</span></li>
           <li>🔗 <span style="flex:1;">Shareable link for your person</span> <span class="badge-pay">₹99 only</span></li>
           <li>💬 <span style="flex:1;">WhatsApp share with one tap</span> <span class="badge-pay">₹99 only</span></li>
         </ul>
       </div>
-
-      <!-- Pricing -->
       <div class="card-cute p-6 mb-5">
         <div class="flex items-center justify-between mb-4">
           <div>
@@ -394,8 +386,6 @@
             <span class="price-tag" id="finalPriceDisplay">₹99</span>
           </div>
         </div>
-
-        <!-- Coupon -->
         <div class="mb-1">
           <label class="block text-xs font-semibold mb-2" style="color: var(--text-mid);">🏷️ Have a coupon code?</label>
           <div class="coupon-input-wrap">
@@ -404,25 +394,19 @@
           </div>
           <p id="couponMsg" class="hidden text-xs mt-1"></p>
         </div>
-
         <div class="divider-hearts" style="margin: 16px 0;">· · ·</div>
-
         <div class="flex items-center justify-between mb-1">
           <span class="text-sm font-semibold" style="color: var(--text-dark);">Total to pay</span>
           <span class="font-playfair text-2xl font-bold" style="color: var(--pink-accent);" id="totalDisplay">₹99</span>
         </div>
         <p class="text-xs" style="color: var(--text-light);" id="savingsDisplay">You save ₹200 today 🎉</p>
       </div>
-
-      <!-- Pay button -->
       <div class="text-center mb-4">
         <button class="btn-pink shine-effect w-full" onclick="initiatePayment()" id="payBtn">
           💳 Pay &amp; Get Shareable Link
         </button>
         <p class="payment-secure mt-3">🔒 Secured by Razorpay · UPI, Cards, NetBanking accepted</p>
       </div>
-
-      <!-- Back -->
       <div class="text-center">
         <button class="btn-outline" onclick="goToPage('page-gift')" style="font-size:0.85rem; padding:10px 24px;">← Go Back</button>
       </div>
@@ -467,41 +451,32 @@
 </div>
 
 <script>
-const state = {
+var state = {
   sender: '', recipient: '', message: '',
   musicPlaying: false, isRecipientView: false,
   paymentDone: false, couponApplied: false,
-  finalAmount: 9900 // in paise = ₹99
+  finalAmount: 9900
 };
 
 // COUPON CONFIG
-// Add more coupons here as needed:
-// 'COUPON_CODE': { amount: <paise>, label: '₹X' }
-const COUPONS = {
-  'BIRTHDAY1': { amount: 100, label: '₹1' },   // ₹1 only
-  'LOVE2025':  { amount: 4900, label: '₹79' },  // ₹49
-  'FREE100':   { amount: 100, label: '₹1' },    // also ₹1
+// LOVE2025 = ₹20 off → ₹99 - ₹20 = ₹79 → 7900 paise
+var COUPONS = {
+  'BIRTHDAY1': { amount: 100,  label: '₹1'  },
+  'LOVE2025':  { amount: 7900, label: '₹79' },
+  'FREE100':   { amount: 100,  label: '₹1'  }
 };
 
 function applyCoupon() {
   var code = document.getElementById('couponInput').value.trim().toUpperCase();
-  var msgEl = document.getElementById('couponMsg');
-  var totalEl = document.getElementById('totalDisplay');
-  var savingsEl = document.getElementById('savingsDisplay');
-
-  if (!code) {
-    showCouponMsg('Please enter a coupon code 🏷️', false);
-    return;
-  }
-
+  if (!code) { showCouponMsg('Please enter a coupon code 🏷️', false); return; }
   if (COUPONS[code]) {
     var coupon = COUPONS[code];
     state.finalAmount = coupon.amount;
     state.couponApplied = true;
     document.getElementById('finalPriceDisplay').textContent = coupon.label;
-    totalEl.textContent = coupon.label;
-    var saved = 9900 - coupon.amount;
-    savingsEl.textContent = 'Coupon applied! You save ₹' + (saved/100) + ' 🎉';
+    document.getElementById('totalDisplay').textContent = coupon.label;
+    var saved = (9900 - coupon.amount) / 100;
+    document.getElementById('savingsDisplay').textContent = 'Coupon applied! You save ₹' + saved + ' 🎉';
     showCouponMsg('✅ Coupon "' + code + '" applied! Price updated to ' + coupon.label, true);
     document.getElementById('couponInput').disabled = true;
     document.querySelector('.btn-apply').disabled = true;
@@ -522,7 +497,6 @@ function initiatePayment() {
   var btn = document.getElementById('payBtn');
   btn.textContent = '⏳ Opening payment...';
   btn.disabled = true;
-
   var options = {
     key: 'rzp_live_Sz9gct8RO5E1jB',
     amount: state.finalAmount,
@@ -535,16 +509,9 @@ function initiatePayment() {
       goToPage('page-share');
       launchConfetti();
     },
-    prefill: {
-      name: state.sender,
-    },
-    notes: {
-      recipient: state.recipient,
-      sender: state.sender
-    },
-    theme: {
-      color: '#FF7BAC'
-    },
+    prefill: { name: state.sender },
+    notes: { recipient: state.recipient, sender: state.sender },
+    theme: { color: '#FF7BAC' },
     modal: {
       ondismiss: function() {
         btn.textContent = '💳 Pay & Get Shareable Link';
@@ -552,7 +519,6 @@ function initiatePayment() {
       }
     }
   };
-
   try {
     var rzp = new Razorpay(options);
     rzp.on('payment.failed', function(resp) {
@@ -600,7 +566,6 @@ function updateReasonsPage() {
   document.getElementById('reasonsSubtitle').textContent = 'for ' + state.recipient + ' ✨';
 }
 function updatePaymentPage() {
-  // Reset coupon state each time payment page opens
   if (!state.couponApplied) {
     state.finalAmount = 9900;
     document.getElementById('finalPriceDisplay').textContent = '₹99';
@@ -638,13 +603,12 @@ function updateGiftPage() {
     }
   }
 }
-
 function updateSharePage() {
   var payload   = { r: state.recipient, s: state.sender, m: state.message };
   var encoded   = encodeState(payload);
   var base      = window.location.href.split('#')[0].split('?')[0];
   var shareLink = base + '#gift=' + encoded;
-  document.getElementById('shareableLink').textContent = shareLink;
+  document.getElementById('shareableLink').textContent  = shareLink;
   document.getElementById('shareRecipient').textContent = state.recipient;
   document.getElementById('shareSender').textContent    = state.sender;
   document.getElementById('shareFor').textContent       = state.recipient;
@@ -711,6 +675,7 @@ function copyLink() {
     setTimeout(function() { msg.classList.add('hidden'); }, 3000);
   });
 }
+
 function shareWhatsApp() {
   var link = document.getElementById('shareableLink').textContent;
   var msg  = encodeURIComponent('🎂 Happy Birthday ' + state.recipient + '! I made you something special 💕\n\n' + link);
@@ -742,6 +707,7 @@ function launchConfetti() {
     })(i);
   }
 }
+
 function launchMiniConfetti() {
   var container = document.getElementById('confettiContainer');
   for (var i = 0; i < 20; i++) {
