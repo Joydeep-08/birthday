@@ -14,8 +14,14 @@
     --lavender: #F0E6FF; --gold: #FFD700; --text-dark: #3D1A24;
     --text-mid: #7A3B55; --text-light: #C06090;
   }
+  body.theme-boy {
+    --pink-soft: #E3F2FD; --pink-mid: #90CAF9; --pink-deep: #2196F3;
+    --pink-accent: #1565C0; --cream: #F5FAFF; --blush: #EAF4FF;
+    --lavender: #E0ECFF; --gold: #FFD700; --text-dark: #14253D;
+    --text-mid: #345A85; --text-light: #6FA0C8;
+  }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Nunito', sans-serif; background: var(--blush); color: var(--text-dark); overflow-x: hidden; min-height: 100vh; }
+  body { font-family: 'Nunito', sans-serif; background: var(--blush); color: var(--text-dark); overflow-x: hidden; min-height: 100vh; transition: background 0.4s ease; }
   .font-playfair { font-family: 'Playfair Display', serif; }
   .font-dancing { font-family: 'Dancing Script', cursive; }
   .page { display: none; min-height: 100vh; animation: fadeInPage 0.6s ease; }
@@ -80,6 +86,9 @@
   .badge-free { background: #dcfce7; color: #16a34a; font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 20px; letter-spacing: 0.5px; }
   .badge-pay { background: #fef3c7; color: #92400e; font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 20px; letter-spacing: 0.5px; }
   .payment-secure { font-size: 0.75rem; color: var(--text-light); text-align: center; margin-top: 10px; }
+  .gender-toggle-wrap { display: flex; gap: 10px; margin-bottom: 4px; }
+  .gender-btn { flex: 1; padding: 12px 10px; border-radius: 16px; border: 2px solid var(--pink-mid); background: white; font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--text-mid); cursor: pointer; transition: all 0.25s ease; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .gender-btn.active { background: linear-gradient(135deg, var(--pink-deep), var(--pink-accent)); color: white; border-color: var(--pink-accent); box-shadow: 0 6px 16px rgba(232,71,122,0.3); }
 </style>
 </head>
 <body>
@@ -119,6 +128,13 @@
             <p class="mt-2 text-sm" style="color: var(--text-light);">Make someone feel extra special today ✨</p>
           </div>
           <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-semibold mb-2" style="color: var(--text-mid);">🎂 This surprise is for a...</label>
+              <div class="gender-toggle-wrap">
+                <button type="button" id="genderBtnFemale" class="gender-btn active" onclick="selectGender('female')">👧 Her</button>
+                <button type="button" id="genderBtnMale" class="gender-btn" onclick="selectGender('male')">🧑 Him</button>
+              </div>
+            </div>
             <div>
               <label class="block text-sm font-semibold mb-2" style="color: var(--text-mid);">👤 Your Name</label>
               <input type="text" id="senderName" class="input-cute" placeholder="e.g. Priya"/>
@@ -214,11 +230,11 @@
       </div>
       <div class="card-cute p-0 overflow-hidden relative mb-6">
         <div style="background: linear-gradient(135deg, var(--pink-soft), var(--lavender)); padding: 20px 24px;">
-          <p class="font-semibold text-sm" style="color: var(--text-mid);">To My Birthday Princess 👸</p>
+          <p class="font-semibold text-sm" style="color: var(--text-mid);" id="letterToLine">To My Birthday Princess 👸</p>
           <p class="text-xs" style="color: var(--text-light);" id="letterSubtitle">With all my love ❤️</p>
         </div>
         <div class="p-6 space-y-4" style="background: repeating-linear-gradient(transparent, transparent 27px, #FFE4EF 28px); line-height: 28px;">
-          <p class="font-playfair italic text-base" style="color: var(--text-dark);">My dearest birthday girl,</p>
+          <p class="font-playfair italic text-base" style="color: var(--text-dark);" id="letterGreeting">My dearest birthday girl,</p>
           <p class="text-sm leading-relaxed" style="color: var(--text-mid);">Today marks another year of your incredible existence, and I couldn't be more grateful to celebrate it with you. 🌸</p>
           <p class="text-sm leading-relaxed" style="color: var(--text-mid);" id="customMsgDisplay">You bring so much joy, laughter, and love into this world. 💕</p>
           <p class="text-sm leading-relaxed" style="color: var(--text-mid);">On this special day, I want you to know that every moment spent with you is a treasure. 🌟</p>
@@ -452,7 +468,7 @@
 
 <script>
 var state = {
-  sender: '', recipient: '', message: '',
+  sender: '', recipient: '', message: '', gender: 'female',
   musicPlaying: false, isRecipientView: false,
   paymentDone: false, couponApplied: false,
   finalAmount: 9900
@@ -465,6 +481,32 @@ var COUPONS = {
   'LOVE2025':  { amount: 7900, label: '₹79' },
   'FREE100':   { amount: 100,  label: '₹1'  }
 };
+
+function selectGender(g) {
+  state.gender = g;
+  document.getElementById('genderBtnFemale').classList.toggle('active', g === 'female');
+  document.getElementById('genderBtnMale').classList.toggle('active', g === 'male');
+  applyTheme(g);
+}
+
+function applyTheme(g) {
+  document.body.classList.toggle('theme-boy', g === 'male');
+}
+
+function pronouns(g) {
+  if (g === 'male') {
+    return {
+      title: 'Boy', salutation: 'Birthday Prince 🤴', greeting: 'My dearest birthday boy,',
+      candleWord: 'Handsome', recipientWord: 'Handsome', subjectCap: 'He', subjectLow: 'he',
+      possessiveCap: 'His', possessiveLow: 'his', objectLow: 'him'
+    };
+  }
+  return {
+    title: 'Girl', salutation: 'Birthday Princess 👸', greeting: 'My dearest birthday girl,',
+    candleWord: 'Beautiful', recipientWord: 'Beautiful', subjectCap: 'She', subjectLow: 'she',
+    possessiveCap: 'Her', possessiveLow: 'her', objectLow: 'her'
+  };
+}
 
 function applyCoupon() {
   var code = document.getElementById('couponInput').value.trim().toUpperCase();
@@ -553,11 +595,15 @@ function startJourney() {
   state.sender    = sender;
   state.recipient = recipient;
   state.message   = message || "You mean the world to me! Wishing you a day as beautiful as you are 💕";
+  applyTheme(state.gender);
   launchConfetti();
   setTimeout(function() { goToPage('page-storybook'); }, 300);
 }
 
 function updateLetterPage() {
+  var p = pronouns(state.gender);
+  document.getElementById('letterToLine').textContent     = 'To My ' + p.salutation;
+  document.getElementById('letterGreeting').textContent    = p.greeting;
   document.getElementById('letterSubtitle').textContent   = 'For ' + state.recipient + ' with love 💕';
   document.getElementById('customMsgDisplay').textContent  = state.message;
   document.getElementById('senderNameDisplay').textContent = '— ' + state.sender + ' ❤️';
@@ -582,6 +628,7 @@ function updatePaymentPage() {
   if (btn) { btn.textContent = '💳 Pay & Get Shareable Link'; btn.disabled = false; }
 }
 function updateGiftPage() {
+  var p = pronouns(state.gender);
   document.getElementById('giftRecipientName').textContent = state.recipient + '!';
   document.getElementById('giftCandleName').textContent    = state.recipient;
   document.getElementById('giftStep1').classList.remove('hidden');
@@ -604,7 +651,7 @@ function updateGiftPage() {
   }
 }
 function updateSharePage() {
-  var payload   = { r: state.recipient, s: state.sender, m: state.message };
+  var payload   = { r: state.recipient, s: state.sender, m: state.message, g: state.gender };
   var encoded   = encodeState(payload);
   var base      = window.location.href.split('#')[0].split('?')[0];
   var shareLink = base + '#gift=' + encoded;
@@ -731,7 +778,11 @@ function checkRoute() {
   state.recipient       = data.r || 'Beautiful';
   state.sender          = data.s || 'Someone special';
   state.message         = data.m || 'You are loved beyond words 💕';
+  state.gender          = data.g || 'female';
   state.isRecipientView = true;
+  applyTheme(state.gender);
+  document.getElementById('genderBtnFemale').classList.toggle('active', state.gender === 'female');
+  document.getElementById('genderBtnMale').classList.toggle('active', state.gender === 'male');
   goToPage('page-storybook');
   launchConfetti();
 }
