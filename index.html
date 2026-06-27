@@ -476,10 +476,13 @@ var state = {
 
 // COUPON CONFIG
 // LOVE2025 = ₹20 off → ₹99 - ₹20 = ₹79 → 7900 paise
+// GIFT100 / FREEBDAY = 100% off → skips Razorpay entirely (Razorpay can't process ₹0 orders)
 var COUPONS = {
   'BIRTHDAY1': { amount: 100,  label: '₹1'  },
   'LOVE2025':  { amount: 7900, label: '₹79' },
-  'FREE100':   { amount: 100,  label: '₹1'  }
+  'FREE100':   { amount: 100,  label: '₹1'  },
+  'GIFT100':   { amount: 0,    label: 'FREE' },
+  'FREEBDAY':  { amount: 0,    label: 'FREE' }
 };
 
 function selectGender(g) {
@@ -523,6 +526,11 @@ function applyCoupon() {
     document.getElementById('couponInput').disabled = true;
     document.querySelector('.btn-apply').disabled = true;
     document.querySelector('.btn-apply').style.opacity = '0.5';
+    // Reflect "free" state on the pay button immediately
+    var btn = document.getElementById('payBtn');
+    if (btn) {
+      btn.textContent = coupon.amount === 0 ? '🎁 Get Free Shareable Link' : '💳 Pay & Get Shareable Link';
+    }
   } else {
     showCouponMsg('❌ Invalid coupon code. Try again!', false);
   }
@@ -537,6 +545,20 @@ function showCouponMsg(text, success) {
 
 function initiatePayment() {
   var btn = document.getElementById('payBtn');
+
+  // If coupon brought the price to ₹0, skip Razorpay entirely —
+  // Razorpay's checkout cannot process a ₹0 order.
+  if (state.finalAmount <= 0) {
+    btn.textContent = '🎉 Unlocking your link...';
+    btn.disabled = true;
+    setTimeout(function() {
+      state.paymentDone = true;
+      goToPage('page-share');
+      launchConfetti();
+    }, 500);
+    return;
+  }
+
   btn.textContent = '⏳ Opening payment...';
   btn.disabled = true;
   var options = {
@@ -625,7 +647,10 @@ function updatePaymentPage() {
     if (msgEl) msgEl.classList.add('hidden');
   }
   var btn = document.getElementById('payBtn');
-  if (btn) { btn.textContent = '💳 Pay & Get Shareable Link'; btn.disabled = false; }
+  if (btn) {
+    btn.textContent = (state.couponApplied && state.finalAmount <= 0) ? '🎁 Get Free Shareable Link' : '💳 Pay & Get Shareable Link';
+    btn.disabled = false;
+  }
 }
 function updateGiftPage() {
   var p = pronouns(state.gender);
@@ -653,8 +678,15 @@ function updateGiftPage() {
 function updateSharePage() {
   var payload   = { r: state.recipient, s: state.sender, m: state.message, g: state.gender };
   var encoded   = encodeState(payload);
+
+  // IMPORTANT: use a query parameter (?gift=...), NOT a hash (#gift=...).
+  // Hash fragments are routinely stripped by Facebook/Messenger/Instagram
+  // link redirectors (and many other link-wrapping services) before the
+  // link reaches the recipient's browser, since fragments are never sent
+  // to a server. Query params survive that round-trip.
   var base      = window.location.href.split('#')[0].split('?')[0];
-  var shareLink = base + '#gift=' + encoded;
+  var shareLink = base + '?gift=' + encoded;
+
   document.getElementById('shareableLink').textContent  = shareLink;
   document.getElementById('shareRecipient').textContent = state.recipient;
   document.getElementById('shareSender').textContent    = state.sender;
@@ -771,10 +803,23 @@ function launchMiniConfetti() {
 }
 
 function checkRoute() {
-  var hash = window.location.hash;
-  if (!hash.startsWith('#gift=')) return;
-  var data = decodeState(hash.slice(6));
+  // Prefer the query param (?gift=...) since it survives Facebook/Messenger
+  // redirect chains. Fall back to the old hash (#gift=...) format so any
+  // links you already shared before this fix still work.
+  var params  = new URLSearchParams(window.location.search);
+  var encoded = params.get('gift');
+
+  if (!encoded) {
+    var hash = window.location.hash;
+    if (hash.startsWith('#gift=')) {
+      encoded = hash.slice(6);
+    }
+  }
+
+  if (!encoded) return;
+  var data = decodeState(encoded);
   if (!data) return;
+
   state.recipient       = data.r || 'Beautiful';
   state.sender          = data.s || 'Someone special';
   state.message         = data.m || 'You are loved beyond words 💕';
