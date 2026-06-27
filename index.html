@@ -684,8 +684,12 @@ function updateSharePage() {
   // link redirectors (and many other link-wrapping services) before the
   // link reaches the recipient's browser, since fragments are never sent
   // to a server. Query params survive that round-trip.
+  //
+  // The encoded string itself is now URL-safe base64 (see encodeState),
+  // but we still run it through encodeURIComponent for absolute safety
+  // in every sharing context (browsers, WhatsApp previews, copy/paste).
   var base      = window.location.href.split('#')[0].split('?')[0];
-  var shareLink = base + '?gift=' + encoded;
+  var shareLink = base + '?gift=' + encodeURIComponent(encoded);
 
   document.getElementById('shareableLink').textContent  = shareLink;
   document.getElementById('shareRecipient').textContent = state.recipient;
@@ -731,13 +735,31 @@ function openGiftBox() {
   }
 }
 
+// ---- URL-safe base64 helpers ----
+// Standard btoa() output can contain '+', '/', and '=' which are NOT safe
+// to drop straight into a URL ('+' means "space" inside a query string,
+// and '=' / '/' can confuse some link-wrapping services). We convert to
+// the "base64url" alphabet so the encoded payload never contains those
+// characters in the first place. encodeURIComponent() is still applied
+// on top of this in updateSharePage() as a second layer of safety.
 function encodeState(data) {
-  try { return btoa(encodeURIComponent(JSON.stringify(data))); }
-  catch(e) { return btoa(JSON.stringify(data)); }
+  var b64;
+  try { b64 = btoa(encodeURIComponent(JSON.stringify(data))); }
+  catch(e) { b64 = btoa(JSON.stringify(data)); }
+  return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 function decodeState(encoded) {
-  try { return JSON.parse(decodeURIComponent(atob(encoded))); }
-  catch(e) { try { return JSON.parse(atob(encoded)); } catch(e2) { return null; } }
+  try {
+    var b64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
+    while (b64.length % 4) b64 += '=';
+    return JSON.parse(decodeURIComponent(atob(b64)));
+  } catch(e) {
+    try {
+      var b64b = encoded.replace(/-/g, '+').replace(/_/g, '/');
+      while (b64b.length % 4) b64b += '=';
+      return JSON.parse(atob(b64b));
+    } catch(e2) { return null; }
+  }
 }
 
 function copyLink() {
@@ -811,7 +833,7 @@ function checkRoute() {
 
   if (!encoded) {
     var hash = window.location.hash;
-    if (hash.startsWith('#gift=')) {
+    if (hash.indexOf('#gift=') === 0) {
       encoded = hash.slice(6);
     }
   }
